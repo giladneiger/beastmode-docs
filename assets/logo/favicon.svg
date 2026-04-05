@@ -1,0 +1,25 @@
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+<style>
+  @media (prefers-color-scheme: dark) {
+    .body { fill: #f0f0f0; }
+    .amber { fill: #F5A623; }
+    .amber-s { stroke: #F5A623; fill: none; }
+  }
+  @media (prefers-color-scheme: light) {
+    .body { fill: #1a1a1a; }
+    .amber { fill: #F5A623; }
+    .amber-s { stroke: #F5A623; fill: none; }
+  }
+</style>
+<g transform="translate(16,20)">
+  <!-- Simplified factory -->
+  <rect class="body" x="-10" y="2" width="11" height="10" rx="1"/>
+  <rect class="body" x="2" y="-2" width="9" height="14" rx="1"/>
+  <rect class="body" x="4" y="-8" width="3" height="7" rx="0.5"/>
+  <rect class="body" x="-11" y="12" width="23" height="1" rx="0.5"/>
+  <!-- Burst -->
+  <line class="amber-s" x1="5.5" y1="-9" x2="5.5" y2="-16" stroke-width="1.5" stroke-linecap="round"/>
+  <polygon class="amber" points="5.5,-16 3,-12 8,-12"/>
+  <circle class="amber" cx="5.5" cy="-17.5" r="1"/>
+</g>
+</svg>

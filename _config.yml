@@ -1,0 +1,38 @@
+title: BeastMode — Dark Factory
+description: Autonomous software factory. Intent in, production software out.
+lang: en
+
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    block:
+      line_numbers: false
+
+plugins:
+  - jekyll-optional-front-matter
+  - jekyll-relative-links
+
+optional_front_matter:
+  remove_originals: true
+
+relative_links:
+  enabled: true
+  collections: true
+
+include:
+  - index.html
+
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor/
+  - .gitignore
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"

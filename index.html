@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BeastMode — Dark Factory</title>
+<meta name="description" content="Autonomous software factory. Intent in, production software out.">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="icon" type="image/svg+xml" href="assets/logo/favicon.svg">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0a0a;
+  --surface: #141414;
+  --border: #262626;
+  --divider: #1f1f1f;
+  --muted: #9a9a9a;
+  --secondary: #c2c2c2;
+  --body: #dcdcdc;
+  --text: #f5f5f5;
+  --accent: #F5A623;
+  --accent-hover: #E5961A;
+  --success: #4ade80;
+  --font-sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', 'JetBrains Mono', Consolas, monospace;
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--body);
+  line-height: 1.6;
+  font-size: 15px;
+  background-image: radial-gradient(circle at 1px 1px, rgba(245,166,35,0.03) 1px, transparent 0);
+  background-size: 32px 32px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+::selection { background: rgba(245,166,35,0.25); color: var(--text); }
+
+a { color: inherit; text-decoration: none; transition: color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease; }
+
+/* ── Navbar ── */
+nav.top {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(10,10,10,0.9);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border-bottom: 0.5px solid var(--divider);
+  padding: 14px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+nav.top .logo { height: 56px; display: block; }
+nav.top .links { display: flex; gap: 28px; font-family: var(--font-mono); font-size: 13px; }
+nav.top .links a { color: var(--secondary); }
+nav.top .links a:hover { color: var(--text); }
+nav.top .links a.accent { color: var(--accent); }
+nav.top .links a.accent:hover { color: var(--accent-hover); }
+
+/* ── Layout ── */
+main { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+section { padding: 80px 0; border-top: 0.5px solid var(--divider); }
+section:first-of-type { border-top: none; }
+.section-label { font-family: var(--font-mono); font-size: 11px; color: var(--muted); letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 28px; }
+
+/* ── Hero ── */
+.hero { padding-top: 80px; padding-bottom: 88px; border-top: none; text-align: center; }
+.hero-logo { width: 360px; max-width: 80vw; height: auto; display: block; margin: 0 auto 48px; }
+.hero-logo .body { fill: #f0f0f0; }
+.hero-logo .win { fill: #0a0a0a; }
+.hero-logo .wm { fill: #f5f5f5; }
+.hero-logo .sub { fill: #8a8a8a; }
+.hero-logo .amber { fill: #F5A623; }
+.hero-logo .amber-s { stroke: #F5A623; fill: none; }
+.hero-label { font-family: var(--font-mono); font-size: 12px; color: var(--accent); letter-spacing: 3px; margin-bottom: 24px; }
+.hero h1 { font-size: 56px; font-weight: 500; color: var(--text); line-height: 1.1; margin-bottom: 28px; letter-spacing: -1px; max-width: 820px; margin-left: auto; margin-right: auto; }
+.hero p.sub { font-size: 18px; color: var(--secondary); line-height: 1.6; margin-bottom: 40px; max-width: 680px; margin-left: auto; margin-right: auto; }
+.cta-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-bottom: 64px; }
+.btn { display: inline-block; padding: 14px 26px; border-radius: 6px; font-size: 14px; font-weight: 500; transition: all 0.15s ease; border: 0.5px solid transparent; cursor: pointer; }
+.btn.primary { background: var(--accent); color: #0a0a0a; font-family: var(--font-sans); }
+.btn.primary:hover { background: var(--accent-hover); }
+.btn.secondary { background: transparent; border-color: #3a3a3a; color: var(--body); font-family: var(--font-mono); }
+.btn.secondary:hover { border-color: var(--secondary); color: var(--text); }
+
+.status-panel { background: var(--surface); border: 0.5px solid var(--border); border-radius: 6px; padding: 22px 28px; font-family: var(--font-mono); max-width: 520px; margin: 0 auto; text-align: left; }
+.status-panel .head { font-size: 11px; color: var(--muted); letter-spacing: 2.5px; margin-bottom: 16px; text-align: center; }
+.status-panel .row { display: flex; justify-content: space-between; font-size: 13px; line-height: 2.1; }
+.status-panel .row .k { color: var(--secondary); }
+.status-panel .row .v.green { color: var(--success); }
+.status-panel .row .v.amber { color: var(--accent); }
+.status-panel .row .v.neutral { color: var(--body); }
+
+/* ── Stats bar ── */
+.stats-bar { display: flex; gap: 48px; flex-wrap: wrap; font-family: var(--font-mono); font-size: 12px; padding: 28px 0; }
+.stats-bar .item { display: flex; gap: 10px; align-items: center; }
+.stats-bar .k { color: var(--muted); letter-spacing: 1.5px; }
+.stats-bar .v { color: var(--accent); }
+.stats-bar .v.neutral { color: var(--body); }
+
+/* ── Pipeline flow ── */
+.flow { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
+.flow .step { background: #161616; border: 0.5px solid #2a2a2a; border-radius: 5px; padding: 14px 20px; display: flex; flex-direction: column; gap: 4px; min-width: 130px; }
+.flow .step .num { font-family: var(--font-mono); font-size: 10px; color: var(--accent); letter-spacing: 1.5px; }
+.flow .step .lbl { font-family: var(--font-mono); font-size: 13px; color: var(--text); }
+.flow .step.final { border-color: var(--accent); }
+.flow .step.final .lbl { color: var(--accent); }
+.flow .chev { color: #555; font-family: var(--font-mono); font-size: 18px; }
+.flow-note { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+
+/* ── What is BeastMode ── */
+.what-is p { font-size: 16px; color: var(--body); line-height: 1.75; max-width: 820px; margin-bottom: 18px; }
+.what-is p strong { color: var(--text); font-weight: 500; }
+.arch-img { display: block; max-width: 100%; height: auto; margin-top: 32px; border: 0.5px solid var(--border); border-radius: 6px; opacity: 0.85; }
+
+/* ── Cards grid ── */
+.grid { display: grid; gap: 14px; }
+.grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+.card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 6px; padding: 24px 26px; display: block; }
+.card:hover { border-color: #3a3a3a; }
+.card .title { font-family: var(--font-sans); font-size: 14px; color: var(--text); font-weight: 500; margin-bottom: 8px; letter-spacing: 0.2px; }
+.card .desc { font-family: var(--font-mono); font-size: 12px; color: var(--secondary); line-height: 1.65; }
+
+/* ── Code block ── */
+.code-block { position: relative; background: var(--surface); border: 0.5px solid var(--border); border-radius: 6px; padding: 28px 28px; font-family: var(--font-mono); font-size: 14px; line-height: 1.75; overflow-x: auto; }
+.code-block code { color: var(--text); white-space: pre; display: block; }
+.code-block .cmt { color: var(--muted); }
+.code-block .str { color: var(--accent); }
+.copy-btn { position: absolute; top: 14px; right: 14px; background: transparent; border: 0.5px solid #3a3a3a; color: var(--body); padding: 6px 14px; border-radius: 4px; font-size: 11px; font-family: var(--font-mono); cursor: pointer; letter-spacing: 1.5px; transition: all 0.15s ease; }
+.copy-btn:hover { border-color: var(--secondary); color: var(--text); }
+.copy-btn.copied { border-color: var(--success); color: var(--success); }
+
+.alt-links { margin-top: 24px; display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: 12px; }
+.alt-links a { color: var(--secondary); }
+.alt-links a:hover { color: var(--accent); }
+
+/* ── Comparison table ── */
+.compare { border-top: 0.5px solid var(--divider); }
+.compare .row { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 0.5px solid var(--divider); }
+.compare .row .cell { padding: 16px 22px; font-family: var(--font-mono); font-size: 13px; line-height: 1.55; }
+.compare .row .cell.left { color: var(--secondary); }
+.compare .row .cell.right { color: var(--accent); border-left: 0.5px solid var(--accent); }
+.compare .head { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 0.5px solid var(--divider); }
+.compare .head .cell { padding: 14px 22px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 2.5px; color: var(--muted); }
+.compare .head .cell.right { color: var(--accent); border-left: 0.5px solid var(--accent); }
+
+/* ── Key capabilities ── */
+.caps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.caps .cap { padding: 16px 18px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 5px; border-left: 2px solid var(--accent); font-family: var(--font-mono); font-size: 13px; color: var(--body); }
+
+/* ── References ── */
+.refs { display: flex; flex-direction: column; gap: 12px; font-family: var(--font-mono); font-size: 14px; }
+.refs a { color: var(--secondary); display: inline-block; }
+.refs a:hover { color: var(--accent); }
+.refs a::before { content: "→ "; color: var(--muted); }
+
+/* ── Footer ── */
+footer { border-top: 0.5px solid var(--divider); padding: 32px 40px; margin-top: 60px; display: flex; align-items: center; justify-content: space-between; max-width: 1280px; margin-left: auto; margin-right: auto; }
+footer .left { display: flex; align-items: center; gap: 10px; }
+footer .left a { display: flex; align-items: center; gap: 10px; color: var(--muted); font-family: var(--font-mono); font-size: 11px; }
+footer .left a:hover { color: var(--body); }
+footer .right { font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+footer .right a { color: var(--secondary); }
+footer .right a:hover { color: var(--body); }
+.dv-mark { display: block; }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  main { padding: 0 28px; }
+  .hero h1 { font-size: 44px; }
+  .hero-logo { width: 300px; margin-bottom: 40px; }
+  section { padding: 64px 0; }
+}
+@media (max-width: 768px) {
+  nav.top { padding: 12px 22px; }
+  nav.top .links { gap: 16px; font-size: 12px; }
+  nav.top .logo { height: 44px; }
+  main { padding: 0 22px; }
+  section { padding: 48px 0; }
+  .hero { padding-top: 48px; padding-bottom: 56px; }
+  .hero-logo { width: 240px; margin-bottom: 32px; }
+  .hero h1 { font-size: 32px; }
+  .hero p.sub { font-size: 15px; }
+  .status-panel { max-width: 100%; padding: 18px 20px; }
+  .grid.cols-3 { grid-template-columns: repeat(2, 1fr); }
+  .caps { grid-template-columns: repeat(2, 1fr); }
+  .flow { gap: 8px; }
+  .flow .chev { display: none; }
+  .flow .step { min-width: 0; flex: 1 1 40%; padding: 12px 14px; }
+  .what-is p { font-size: 15px; }
+  footer { padding: 24px 22px; }
+}
+@media (max-width: 480px) {
+  nav.top .links { gap: 10px; }
+  .grid.cols-3, .grid.cols-2 { grid-template-columns: 1fr; }
+  .caps { grid-template-columns: 1fr; }
+  .compare .row { grid-template-columns: 1fr; }
+  .compare .row .cell.right { border-left: none; border-top: 0.5px solid var(--accent); }
+  .compare .head { display: none; }
+  .hero h1 { font-size: 24px; }
+  .stats-bar { gap: 18px; }
+  footer { flex-direction: column; gap: 12px; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <a href="#top" aria-label="BeastMode home" style="display:flex;">
+    <svg class="logo" viewBox="0 0 520 80" xmlns="http://www.w3.org/2000/svg" style="height:56px;width:auto;" aria-label="BeastMode — Dark Factory">
+      <g transform="translate(45,48) scale(0.3)">
+        <rect fill="#f0f0f0" x="-52" y="8" width="62" height="56" rx="2"/>
+        <rect fill="#f0f0f0" x="12" y="-12" width="44" height="76" rx="2"/>
+        <rect fill="#f0f0f0" x="20" y="-50" width="13" height="42" rx="1.5"/>
+        <rect fill="#f0f0f0" x="39" y="-32" width="10" height="24" rx="1.5"/>
+        <rect fill="#0a0a0a" x="-43" y="18" width="10" height="9" rx="1"/>
+        <rect fill="#0a0a0a" x="-28" y="18" width="10" height="9" rx="1"/>
+        <rect fill="#0a0a0a" x="-43" y="34" width="10" height="9" rx="1"/>
+        <rect fill="#0a0a0a" x="-28" y="34" width="10" height="9" rx="1"/>
+        <rect fill="#0a0a0a" x="20" y="0" width="10" height="10" rx="1"/>
+        <rect fill="#0a0a0a" x="38" y="0" width="10" height="10" rx="1"/>
+        <rect fill="#0a0a0a" x="20" y="18" width="10" height="10" rx="1"/>
+        <rect fill="#0a0a0a" x="38" y="18" width="10" height="10" rx="1"/>
+        <rect fill="#f0f0f0" x="-58" y="64" width="120" height="3" rx="1.5"/>
+        <line stroke="#F5A623" fill="none" x1="26" y1="-54" x2="26" y2="-90" stroke-width="3.5" stroke-linecap="round"/>
+        <polygon fill="#F5A623" points="26,-90 18,-76 34,-76"/>
+        <line stroke="#F5A623" fill="none" x1="14" y1="-56" x2="6" y2="-76" stroke-width="1.8" stroke-linecap="round"/>
+        <polygon fill="#F5A623" points="6,-76 1,-67 11,-67"/>
+        <line stroke="#F5A623" fill="none" x1="40" y1="-46" x2="47" y2="-68" stroke-width="1.8" stroke-linecap="round"/>
+        <polygon fill="#F5A623" points="47,-68 42,-59 52,-59"/>
+        <circle fill="#F5A623" cx="26" cy="-98" r="2.5"/>
+        <circle fill="#F5A623" cx="0" cy="-82" r="1.5"/>
+        <circle fill="#F5A623" cx="52" cy="-74" r="1.5"/>
+      </g>
+      <text fill="#f0f0f0" x="90" y="44" font-family="system-ui,-apple-system,sans-serif" font-size="26" font-weight="500" letter-spacing="6">BEASTMODE</text>
+      <text fill="#555" x="90" y="62" font-family="system-ui,-apple-system,sans-serif" font-size="9" letter-spacing="3">DARK FACTORY</text>
+    </svg>
+  </a>
+  <div class="links">
+    <a href="#docs">docs</a>
+    <a href="#architecture">architecture</a>
+    <a href="#quickstart">quickstart</a>
+    <a href="https://github.com/giladneiger/beastmode-docs" class="accent" target="_blank" rel="noopener">github</a>
+  </div>
+</nav>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero">
+  <svg class="hero-logo" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="BeastMode — Dark Factory">
+    <g transform="translate(200,130)">
+      <rect class="body" x="-52" y="8" width="62" height="56" rx="2"/>
+      <rect class="body" x="12" y="-12" width="44" height="76" rx="2"/>
+      <rect class="body" x="20" y="-50" width="13" height="42" rx="1.5"/>
+      <rect class="body" x="39" y="-32" width="10" height="24" rx="1.5"/>
+      <rect class="win" x="-43" y="18" width="10" height="9" rx="1"/>
+      <rect class="win" x="-28" y="18" width="10" height="9" rx="1"/>
+      <rect class="win" x="-43" y="34" width="10" height="9" rx="1"/>
+      <rect class="win" x="-28" y="34" width="10" height="9" rx="1"/>
+      <rect class="win" x="20" y="0" width="10" height="10" rx="1"/>
+      <rect class="win" x="38" y="0" width="10" height="10" rx="1"/>
+      <rect class="win" x="20" y="18" width="10" height="10" rx="1"/>
+      <rect class="win" x="38" y="18" width="10" height="10" rx="1"/>
+      <rect class="body" x="-58" y="64" width="120" height="3" rx="1.5"/>
+      <line class="amber-s" x1="26" y1="-54" x2="26" y2="-98" stroke-width="3.5" stroke-linecap="round"/>
+      <polygon class="amber" points="26,-98 17,-82 35,-82"/>
+      <line class="amber-s" x1="14" y1="-56" x2="5" y2="-80" stroke-width="1.8" stroke-linecap="round"/>
+      <polygon class="amber" points="5,-80 0,-70 10,-70"/>
+      <line class="amber-s" x1="40" y1="-46" x2="48" y2="-72" stroke-width="1.8" stroke-linecap="round"/>
+      <polygon class="amber" points="48,-72 43,-62 53,-62"/>
+      <circle class="amber" cx="26" cy="-108" r="3"/>
+      <circle class="amber" cx="0" cy="-86" r="1.8"/>
+      <circle class="amber" cx="53" cy="-78" r="1.8"/>
+      <circle class="amber" cx="13" cy="-96" r="1.5"/>
+      <circle class="amber" cx="42" cy="-88" r="1.3"/>
+    </g>
+    <text class="wm" x="200" y="255" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="30" font-weight="500" letter-spacing="7">BEASTMODE</text>
+    <text class="sub" x="200" y="280" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="11" letter-spacing="4">DARK FACTORY</text>
+  </svg>
+  <div class="hero-label">// DARK FACTORY — LEVEL 5</div>
+  <h1>Intent in. Production software out.</h1>
+  <p class="sub">The autonomous pipeline that turns natural language into verified, deployed code. No code review. No manual QA. No human in the loop during execution.</p>
+  <div class="cta-row">
+    <a href="#quickstart" class="btn primary">Get started</a>
+    <a href="https://github.com/giladneiger/beastmode-docs" class="btn secondary" target="_blank" rel="noopener">$ docker compose up</a>
+  </div>
+  <aside class="status-panel">
+    <div class="head">SYSTEM SPECS</div>
+    <div class="row"><span class="k">stages</span><span class="v amber">6</span></div>
+    <div class="row"><span class="k">agents</span><span class="v amber">13</span></div>
+    <div class="row"><span class="k">task types</span><span class="v amber">5</span></div>
+    <div class="row"><span class="k">human gates</span><span class="v amber">1</span></div>
+    <div class="row"><span class="k">deploy modes</span><span class="v amber">3</span></div>
+    <div class="row"><span class="k">code review</span><span class="v green">none</span></div>
+  </aside>
+</section>
+
+<!-- STATS BAR -->
+<section style="padding:0;">
+  <div class="stats-bar">
+    <div class="item"><span class="k">TASK TYPES</span><span class="v">5</span></div>
+    <div class="item"><span class="k">PIPELINES</span><span class="v neutral">code / epic / deep-plan / infra-plan / infra</span></div>
+    <div class="item"><span class="k">HUMAN GATES</span><span class="v">1</span><span class="k">(spec approval)</span></div>
+  </div>
+</section>
+
+<!-- PIPELINE FLOW -->
+<section>
+  <div class="section-label">WHAT HAPPENS WHEN YOU POST A TASK</div>
+  <div class="flow">
+    <div class="step"><span class="num">01</span><span class="lbl">spec</span></div>
+    <span class="chev">&gt;</span>
+    <div class="step"><span class="num">02</span><span class="lbl">build</span></div>
+    <span class="chev">&gt;</span>
+    <div class="step"><span class="num">03</span><span class="lbl">verify</span></div>
+    <span class="chev">&gt;</span>
+    <div class="step"><span class="num">04</span><span class="lbl">deploy</span></div>
+    <span class="chev">&gt;</span>
+    <div class="step"><span class="num">05</span><span class="lbl">prod check</span></div>
+    <span class="chev">&gt;</span>
+    <div class="step final"><span class="num">06</span><span class="lbl">shipped</span></div>
+  </div>
+  <div class="flow-note">convergence loop: verify fails → rebuild → re-verify → until satisfied or ceiling hit</div>
+</section>
+
+<!-- WHAT IS BEASTMODE -->
+<section id="architecture" class="what-is">
+  <div class="section-label">WHAT IS BEASTMODE</div>
+  <p>You post a task on the BeastMode Board. BeastMode picks it up, writes a <strong>spec</strong>, designs <strong>holdout scenarios</strong>, implements the code, verifies it with <strong>Playwright</strong> browser automation, opens a PR, auto-reviews it, merges, deploys to AWS, verifies production with screenshots as proof, and auto-rolls back on failure — all without human intervention. The only human touchpoint is approving the spec before implementation begins.</p>
+  <p>BeastMode replaces the entire software development process — not individual developers. Instead of AI actors mimicking a human team (PM writes spec, dev writes code, QA reviews), BeastMode runs a <strong>staged pipeline with a convergence loop</strong>. Code quality isn't judged by reviewers — it's measured by whether the software satisfies holdout scenarios that the coders never see.</p>
+  <img src="assets/architecture-diagram.png" alt="BeastMode architecture" class="arch-img" loading="lazy">
+</section>
+
+<!-- TASK TYPES -->
+<section>
+  <div class="section-label">TASK TYPES</div>
+  <div class="grid cols-3">
+    <div class="card"><div class="title">code <span style="color:var(--muted);font-weight:400;">(default)</span></div><div class="desc">Full pipeline: spec → build → ship → deploy</div></div>
+    <div class="card"><div class="title">epic</div><div class="desc">Epic decomposition → ordered stories</div></div>
+    <div class="card"><div class="title">deep-planning</div><div class="desc">Iterative Q&amp;A → comprehensive decomposition</div></div>
+    <div class="card"><div class="title">infra-plan</div><div class="desc">Infrastructure planning → sub-tasks</div></div>
+    <div class="card"><div class="title">infrastructure</div><div class="desc">Terraform apply + verification</div></div>
+  </div>
+</section>
+
+<!-- DOCUMENTATION -->
+<section id="docs">
+  <div class="section-label">DOCUMENTATION</div>
+  <div class="grid cols-3">
+    <a class="card" href="guides/setup.md"><div class="title">Setup Guide</div><div class="desc">Three ways to deploy: cloud, Docker, bare metal</div></a>
+    <a class="card" href="getting-started.md"><div class="title">Getting Started</div><div class="desc">Create tasks, task types, tips, FAQ</div></a>
+    <a class="card" href="pipeline.md"><div class="title">Pipeline</div><div class="desc">Step-by-step walkthrough of all pipeline types</div></a>
+    <a class="card" href="resilience.md"><div class="title">Resilience</div><div class="desc">Self-healing, auto-rollback, SRE gating, crash recovery</div></a>
+    <a class="card" href="architecture.md"><div class="title">Architecture</div><div class="desc">Information barriers, daemon, agents, task lifecycle</div></a>
+    <a class="card" href="configuration.md"><div class="title">Configuration</div><div class="desc">All params, Docker Compose setup, project structure</div></a>
+    <a class="card" href="cost-analysis.md"><div class="title">Cost Analysis</div><div class="desc">Token estimates, per-task costs, savings</div></a>
+  </div>
+</section>
+
+<!-- QUICK START -->
+<section id="quickstart">
+  <div class="section-label">QUICK START</div>
+  <div class="code-block">
+    <button class="copy-btn" id="copyBtn">COPY</button>
+    <code id="quickstart-code"><span class="cmt"># clone + configure</span>
+git clone https://github.com/giladneiger/beastmode.git
+cd beastmode
+cp .env.example .env   <span class="cmt"># edit with your API keys + project path</span>
+
+<span class="cmt"># run</span>
+docker compose up
+
+<span class="cmt"># Open </span><span class="str">http://localhost:8420</span><span class="cmt"> for the board UI</span>
+<span class="cmt"># Create a task → BeastMode picks it up automatically</span></code>
+  </div>
+  <div class="alt-links">
+    <a href="guides/setup.md">→ Interactive setup wizard</a>
+    <a href="guides/setup.md#local-mode">→ Local mode (Claude Code)</a>
+    <a href="guides/setup.md#daemon-mode">→ Daemon mode (EC2)</a>
+  </div>
+</section>
+
+<!-- LEVEL 4 vs LEVEL 5 -->
+<section>
+  <div class="section-label">LEVEL 4 vs LEVEL 5</div>
+  <div class="compare">
+    <div class="head">
+      <div class="cell">LEVEL 4</div>
+      <div class="cell right">LEVEL 5 — BEASTMODE</div>
+    </div>
+    <div class="row"><div class="cell left">Code review by AI reviewer</div><div class="cell right">Scenario-based verification</div></div>
+    <div class="row"><div class="cell left">Tests pass/fail (boolean)</div><div class="cell right">Satisfaction metrics (0.0–1.0)</div></div>
+    <div class="row"><div class="cell left">Build once, review, ship</div><div class="cell right">Convergence loop until satisfied</div></div>
+    <div class="row"><div class="cell left">Manual failure recovery</div><div class="cell right">Tiered self-healing + auto-rollback</div></div>
+    <div class="row"><div class="cell left">Session-bound, human at terminal</div><div class="cell right">Daemon on EC2, async via board</div></div>
+    <div class="row"><div class="cell left">Single repo</div><div class="cell right">Multi-repo: app, infra, GitOps, pipeline</div></div>
+    <div class="row"><div class="cell left">Sequential task execution</div><div class="cell right">Dynamic N-slot concurrency</div></div>
+    <div class="row"><div class="cell left">Restart daemon to change config</div><div class="cell right">Hot config reload</div></div>
+    <div class="row"><div class="cell left">No visual proof</div><div class="cell right">Playwright screenshots as proof</div></div>
+    <div class="row"><div class="cell left">Depends on external project mgmt</div><div class="cell right">Built-in task board, zero dependencies</div></div>
+  </div>
+</section>
+
+<!-- KEY CAPABILITIES -->
+<section>
+  <div class="section-label">KEY CAPABILITIES</div>
+  <div class="caps">
+    <div class="cap">Information barrier architecture</div>
+    <div class="cap">Convergence loop with probabilistic satisfaction</div>
+    <div class="cap">Tiered self-healing (0 tokens → Claude-assisted)</div>
+    <div class="cap">Epic orchestration with approval cascading</div>
+    <div class="cap">Database migration safety gate</div>
+    <div class="cap">Fail-fast on low satisfaction (&lt; 0.3)</div>
+    <div class="cap">Haiku pre-check before expensive verifier</div>
+    <div class="cap">Self-hosted GitHub Actions runner</div>
+    <div class="cap">Auto-rollback on production failure</div>
+  </div>
+</section>
+
+<!-- REFERENCES -->
+<section>
+  <div class="section-label">REFERENCES</div>
+  <div class="refs">
+    <a href="https://simonwillison.net/2026/Feb/7/software-factory/" target="_blank" rel="noopener">StrongDM Software Factory</a>
+    <a href="https://simonwillison.net/2026/Jan/28/the-five-levels/" target="_blank" rel="noopener">The Five Levels of AI Coding (Dan Shapiro)</a>
+    <a href="https://github.com/strongdm/attractor" target="_blank" rel="noopener">Attractor (StrongDM)</a>
+    <a href="https://claude.com/claude-code" target="_blank" rel="noopener">Claude Code</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="left">
+    <a href="https://develeap.com" target="_blank" rel="noopener">
+      <svg class="dv-mark" viewBox="0 0 20 16" width="14" height="11" aria-hidden="true">
+        <circle cx="6" cy="8" r="5.5" fill="#F5A623"/>
+        <path d="M12,2 A6.5,6.5 0 0,1 12,14 L12,2 Z" fill="#f0f0f0"/>
+      </svg>
+      <span>manufactured by develeap</span>
+    </a>
+  </div>
+  <div class="right">MIT license — <a href="https://github.com/giladneiger/beastmode-docs" target="_blank" rel="noopener">github.com/giladneiger/beastmode-docs</a></div>
+</footer>
+
+<script>
+// On GitHub Pages / Jekyll, rewrite .md links → .html (local python server keeps .md).
+(function() {
+  var isJekyllServed = location.hostname.endsWith('github.io')
+                    || location.hostname.endsWith('github.dev')
+                    || document.documentElement.hasAttribute('data-jekyll');
+  if (isJekyllServed) {
+    document.querySelectorAll('a[href$=".md"], a[href*=".md#"]').forEach(function(a) {
+      a.href = a.href.replace(/\.md(?=$|#|\?)/, '.html');
+    });
+  }
+})();
+
+(function() {
+  const btn = document.getElementById('copyBtn');
+  const code = document.getElementById('quickstart-code');
+  if (!btn || !code) return;
+  btn.addEventListener('click', function() {
+    const text = code.innerText;
+    navigator.clipboard.writeText(text).then(function() {
+      btn.textContent = 'COPIED';
+      btn.classList.add('copied');
+      setTimeout(function() {
+        btn.textContent = 'COPY';
+        btn.classList.remove('copied');
+      }, 1400);
+    }).catch(function() {
+      btn.textContent = 'ERROR';
+      setTimeout(function() { btn.textContent = 'COPY'; }, 1400);
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

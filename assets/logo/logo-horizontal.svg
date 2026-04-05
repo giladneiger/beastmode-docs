@@ -1,0 +1,46 @@
+<svg viewBox="0 0 520 80" xmlns="http://www.w3.org/2000/svg">
+<style>
+  @media (prefers-color-scheme: dark) {
+    .body { fill: #f0f0f0; }
+    .win { fill: #141414; }
+    .amber { fill: #F5A623; }
+    .amber-s { stroke: #F5A623; fill: none; }
+    .wm { fill: #f0f0f0; }
+    .sub { fill: #555; }
+  }
+  @media (prefers-color-scheme: light) {
+    .body { fill: #1a1a1a; }
+    .win { fill: #f5f5f5; }
+    .amber { fill: #F5A623; }
+    .amber-s { stroke: #F5A623; fill: none; }
+    .wm { fill: #1a1a1a; }
+    .sub { fill: #999; }
+  }
+</style>
+<g transform="translate(45,48) scale(0.3)">
+  <rect class="body" x="-52" y="8" width="62" height="56" rx="2"/>
+  <rect class="body" x="12" y="-12" width="44" height="76" rx="2"/>
+  <rect class="body" x="20" y="-50" width="13" height="42" rx="1.5"/>
+  <rect class="body" x="39" y="-32" width="10" height="24" rx="1.5"/>
+  <rect class="win" x="-43" y="18" width="10" height="9" rx="1"/>
+  <rect class="win" x="-28" y="18" width="10" height="9" rx="1"/>
+  <rect class="win" x="-43" y="34" width="10" height="9" rx="1"/>
+  <rect class="win" x="-28" y="34" width="10" height="9" rx="1"/>
+  <rect class="win" x="20" y="0" width="10" height="10" rx="1"/>
+  <rect class="win" x="38" y="0" width="10" height="10" rx="1"/>
+  <rect class="win" x="20" y="18" width="10" height="10" rx="1"/>
+  <rect class="win" x="38" y="18" width="10" height="10" rx="1"/>
+  <rect class="body" x="-58" y="64" width="120" height="3" rx="1.5"/>
+  <line class="amber-s" x1="26" y1="-54" x2="26" y2="-90" stroke-width="3.5" stroke-linecap="round"/>
+  <polygon class="amber" points="26,-90 18,-76 34,-76"/>
+  <line class="amber-s" x1="14" y1="-56" x2="6" y2="-76" stroke-width="1.8" stroke-linecap="round"/>
+  <polygon class="amber" points="6,-76 1,-67 11,-67"/>
+  <line class="amber-s" x1="40" y1="-46" x2="47" y2="-68" stroke-width="1.8" stroke-linecap="round"/>
+  <polygon class="amber" points="47,-68 42,-59 52,-59"/>
+  <circle class="amber" cx="26" cy="-98" r="2.5"/>
+  <circle class="amber" cx="0" cy="-82" r="1.5"/>
+  <circle class="amber" cx="52" cy="-74" r="1.5"/>
+</g>
+<text class="wm" x="90" y="44" font-family="system-ui,-apple-system,sans-serif" font-size="26" font-weight="500" letter-spacing="6">BEASTMODE</text>
+<text class="sub" x="90" y="62" font-family="system-ui,-apple-system,sans-serif" font-size="9" letter-spacing="3">DARK FACTORY</text>
+</svg>

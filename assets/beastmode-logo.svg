@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0f;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a1a2e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e94560;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#c23152;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e94560;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="gear" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#533483;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2b1055;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="converge" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0f3460;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#16213e;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glowFilter">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="800" rx="40" fill="url(#bg)"/>
+
+  <!-- Subtle grid pattern -->
+  <g opacity="0.05" stroke="#e94560" stroke-width="0.5">
+    <line x1="0" y1="100" x2="800" y2="100"/>
+    <line x1="0" y1="200" x2="800" y2="200"/>
+    <line x1="0" y1="300" x2="800" y2="300"/>
+    <line x1="0" y1="400" x2="800" y2="400"/>
+    <line x1="0" y1="500" x2="800" y2="500"/>
+    <line x1="0" y1="600" x2="800" y2="600"/>
+    <line x1="0" y1="700" x2="800" y2="700"/>
+    <line x1="100" y1="0" x2="100" y2="800"/>
+    <line x1="200" y1="0" x2="200" y2="800"/>
+    <line x1="300" y1="0" x2="300" y2="800"/>
+    <line x1="400" y1="0" x2="400" y2="800"/>
+    <line x1="500" y1="0" x2="500" y2="800"/>
+    <line x1="600" y1="0" x2="600" y2="800"/>
+    <line x1="700" y1="0" x2="700" y2="800"/>
+  </g>
+
+  <!-- Outer convergence ring -->
+  <circle cx="400" cy="340" r="220" fill="none" stroke="#533483" stroke-width="2" opacity="0.3"/>
+  <circle cx="400" cy="340" r="200" fill="none" stroke="#e94560" stroke-width="1" opacity="0.15" stroke-dasharray="8 12"/>
+
+  <!-- Factory gear (left) -->
+  <g transform="translate(235, 280)" opacity="0.25">
+    <path d="M0,-45 L8,-42 L12,-55 L20,-52 L18,-38 L26,-32 L35,-42 L42,-35 L32,-26 L38,-18 L52,-20 L55,-12 L42,-8 L45,0 L55,4 L52,12 L38,8 L32,16 L42,25 L35,32 L26,22 L18,28 L20,42 L12,45 L8,32 L0,35 L-8,32 L-12,45 L-20,42 L-18,28 L-26,22 L-35,32 L-42,25 L-32,16 L-38,8 L-52,12 L-55,4 L-42,0 L-45,-8 L-55,-12 L-52,-20 L-38,-18 L-32,-26 L-42,-35 L-35,-42 L-26,-32 L-18,-38 L-20,-52 L-12,-55 L-8,-42Z" fill="url(#gear)" stroke="#533483" stroke-width="1.5"/>
+    <circle cx="0" cy="0" r="18" fill="#0a0a0f" stroke="#533483" stroke-width="1.5"/>
+  </g>
+
+  <!-- Factory gear (right) -->
+  <g transform="translate(565, 280) rotate(15)" opacity="0.25">
+    <path d="M0,-40 L7,-37 L10,-48 L17,-46 L15,-33 L22,-28 L30,-37 L36,-30 L28,-22 L33,-15 L45,-17 L48,-10 L36,-7 L39,0 L48,3 L45,10 L33,7 L28,14 L36,22 L30,28 L22,19 L15,24 L17,36 L10,39 L7,28 L0,30 L-7,28 L-10,39 L-17,36 L-15,24 L-22,19 L-30,28 L-36,22 L-28,14 L-33,7 L-45,10 L-48,3 L-36,0 L-39,-7 L-48,-10 L-45,-17 L-33,-15 L-28,-22 L-36,-30 L-30,-37 L-22,-28 L-15,-33 L-17,-46 L-10,-48 L-7,-37Z" fill="url(#gear)" stroke="#533483" stroke-width="1.5"/>
+    <circle cx="0" cy="0" r="15" fill="#0a0a0f" stroke="#533483" stroke-width="1.5"/>
+  </g>
+
+  <!-- Central beast eye / convergence symbol -->
+  <g filter="url(#softGlow)">
+    <!-- Outer eye shape -->
+    <ellipse cx="400" cy="340" rx="120" ry="70" fill="none" stroke="#e94560" stroke-width="3" opacity="0.6"/>
+    <!-- Inner eye -->
+    <ellipse cx="400" cy="340" rx="80" ry="50" fill="none" stroke="#e94560" stroke-width="2" opacity="0.4"/>
+    <!-- Pupil - the convergence point -->
+    <circle cx="400" cy="340" r="30" fill="#e94560" opacity="0.15"/>
+    <circle cx="400" cy="340" r="18" fill="#e94560" opacity="0.3"/>
+    <circle cx="400" cy="340" r="8" fill="#e94560" opacity="0.9"/>
+    <!-- Pupil highlight -->
+    <circle cx="395" cy="335" r="3" fill="#fff" opacity="0.6"/>
+  </g>
+
+  <!-- Convergence arrows (loop symbol) -->
+  <g filter="url(#glowFilter)" opacity="0.7">
+    <!-- Top arrow (clockwise) -->
+    <path d="M400,195 C480,195 540,250 540,340" fill="none" stroke="#e94560" stroke-width="2.5" stroke-linecap="round"/>
+    <polygon points="543,325 535,345 548,340" fill="#e94560"/>
+
+    <!-- Bottom arrow (clockwise) -->
+    <path d="M400,485 C320,485 260,430 260,340" fill="none" stroke="#e94560" stroke-width="2.5" stroke-linecap="round"/>
+    <polygon points="257,355 265,335 252,340" fill="#e94560"/>
+  </g>
+
+  <!-- Pipeline flow dots -->
+  <g filter="url(#glowFilter)">
+    <circle cx="400" cy="165" r="4" fill="#533483" opacity="0.8"/>
+    <circle cx="400" cy="515" r="4" fill="#533483" opacity="0.8"/>
+    <circle cx="225" cy="340" r="4" fill="#533483" opacity="0.8"/>
+    <circle cx="575" cy="340" r="4" fill="#533483" opacity="0.8"/>
+  </g>
+
+  <!-- Satisfaction meter arc (bottom of eye) -->
+  <g opacity="0.5">
+    <path d="M310,420 A100,100 0 0,1 490,420" fill="none" stroke="#1a1a2e" stroke-width="6" stroke-linecap="round"/>
+    <path d="M310,420 A100,100 0 0,1 463,430" fill="none" stroke="#e94560" stroke-width="6" stroke-linecap="round" opacity="0.8"/>
+    <!-- 0.85 marker -->
+    <text x="470" y="445" font-family="monospace" font-size="11" fill="#e94560" opacity="0.6">0.85</text>
+  </g>
+
+  <!-- "BEAST" text -->
+  <text x="400" y="600" text-anchor="middle" font-family="'SF Mono', 'Fira Code', 'Consolas', monospace" font-size="72" font-weight="900" letter-spacing="18" fill="url(#glow)" filter="url(#glowFilter)">BEAST</text>
+
+  <!-- "MODE" text -->
+  <text x="400" y="660" text-anchor="middle" font-family="'SF Mono', 'Fira Code', 'Consolas', monospace" font-size="42" font-weight="300" letter-spacing="24" fill="#533483" opacity="0.8">MODE</text>
+
+  <!-- Tagline -->
+  <text x="400" y="710" text-anchor="middle" font-family="'SF Mono', 'Fira Code', 'Consolas', monospace" font-size="13" letter-spacing="6" fill="#e94560" opacity="0.4">DARK FACTORY</text>
+
+  <!-- Version badge -->
+  <rect x="355" y="725" width="90" height="22" rx="11" fill="none" stroke="#533483" stroke-width="1" opacity="0.3"/>
+  <text x="400" y="740" text-anchor="middle" font-family="'SF Mono', 'Fira Code', 'Consolas', monospace" font-size="10" letter-spacing="2" fill="#533483" opacity="0.5">v2</text>
+</svg>
