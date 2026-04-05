@@ -1,0 +1,248 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 620" role="img" aria-label="BeastMode pipeline architecture">
+  <defs>
+    <style>
+      .bg { fill: #0a0a0a; }
+      .card { fill: #141414; stroke: #262626; stroke-width: 1; rx: 6; }
+      .card-accent { fill: #141414; stroke: #F5A623; stroke-width: 1.25; rx: 6; }
+      .card-phase { fill: #1a1a1a; stroke: #2a2a2a; stroke-width: 1; stroke-dasharray: 0; rx: 10; }
+      .label { fill: #f5f5f5; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 13px; font-weight: 500; }
+      .label-sm { fill: #c2c2c2; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 10px; font-weight: 400; }
+      .label-muted { fill: #9a9a9a; font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; }
+      .label-amber { fill: #F5A623; font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 500; }
+      .flow { stroke: #3a3a3a; stroke-width: 1.25; fill: none; }
+      .flow-amber { stroke: #F5A623; stroke-width: 1.25; fill: none; }
+      .flow-loop { stroke: #F5A623; stroke-width: 1; fill: none; stroke-dasharray: 4 3; }
+      .flow-feedback { stroke: #E5961A; stroke-width: 1; fill: none; stroke-dasharray: 3 3; }
+      .tip { fill: #F5A623; }
+      .tip-muted { fill: #3a3a3a; }
+      .title { fill: #f5f5f5; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 15px; font-weight: 500; }
+      .phase-label { fill: #9a9a9a; font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; }
+      .num { fill: #F5A623; font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 10px; font-weight: 500; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="tip-muted"/>
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="tip"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1400" height="620"/>
+
+  <!-- Human -->
+  <g transform="translate(30,260)">
+    <circle cx="30" cy="20" r="10" fill="none" stroke="#c2c2c2" stroke-width="1.5"/>
+    <path d="M 12 52 Q 12 36 30 36 Q 48 36 48 52" fill="none" stroke="#c2c2c2" stroke-width="1.5"/>
+    <text x="30" y="78" text-anchor="middle" class="label-sm">human</text>
+  </g>
+
+  <!-- Arrow: Human → Board -->
+  <line x1="90" y1="290" x2="148" y2="290" class="flow" marker-end="url(#arrow)"/>
+  <text x="119" y="278" text-anchor="middle" class="label-sm">posts task</text>
+
+  <!-- BeastMode Board -->
+  <g transform="translate(150,240)">
+    <rect class="card-accent" x="0" y="0" width="130" height="100" rx="6"/>
+    <text x="65" y="20" text-anchor="middle" class="label-amber">board</text>
+    <!-- Kanban columns mini -->
+    <rect x="14" y="32" width="26" height="50" rx="2" fill="#1f1f1f" stroke="#2a2a2a"/>
+    <rect x="46" y="32" width="26" height="50" rx="2" fill="#1f1f1f" stroke="#2a2a2a"/>
+    <rect x="78" y="32" width="26" height="50" rx="2" fill="#1f1f1f" stroke="#2a2a2a"/>
+    <rect x="17" y="36" width="20" height="6" rx="1" fill="#2a2a2a"/>
+    <rect x="17" y="46" width="20" height="6" rx="1" fill="#2a2a2a"/>
+    <rect x="49" y="36" width="20" height="6" rx="1" fill="#F5A623"/>
+    <rect x="49" y="46" width="20" height="6" rx="1" fill="#2a2a2a"/>
+    <rect x="81" y="36" width="20" height="6" rx="1" fill="#2a2a2a"/>
+    <text x="65" y="94" text-anchor="middle" class="label-sm">FastAPI + SQLite</text>
+  </g>
+
+  <!-- Arrow: Board → Daemon (poll) -->
+  <line x1="280" y1="290" x2="338" y2="290" class="flow" marker-end="url(#arrow)"/>
+  <text x="309" y="278" text-anchor="middle" class="label-sm">poll 60s</text>
+
+  <!-- Daemon -->
+  <g transform="translate(340,240)">
+    <rect class="card" x="0" y="0" width="120" height="100" rx="6"/>
+    <text x="60" y="20" text-anchor="middle" class="label-muted">daemon</text>
+    <!-- N-slot icon -->
+    <rect x="20" y="34" width="22" height="22" rx="3" fill="#1f1f1f" stroke="#F5A623" stroke-width="0.8"/>
+    <text x="31" y="49" text-anchor="middle" fill="#F5A623" font-family="SF Mono,Menlo,monospace" font-size="9">S0</text>
+    <rect x="48" y="34" width="22" height="22" rx="3" fill="#1f1f1f" stroke="#F5A623" stroke-width="0.8"/>
+    <text x="59" y="49" text-anchor="middle" fill="#F5A623" font-family="SF Mono,Menlo,monospace" font-size="9">S1</text>
+    <rect x="76" y="34" width="22" height="22" rx="3" fill="#1f1f1f" stroke="#2a2a2a" stroke-dasharray="2 2"/>
+    <text x="87" y="49" text-anchor="middle" fill="#555" font-family="SF Mono,Menlo,monospace" font-size="9">…</text>
+    <text x="60" y="78" text-anchor="middle" class="label-sm">N-slot scheduler</text>
+    <text x="60" y="92" text-anchor="middle" class="label-sm">priority queue</text>
+  </g>
+
+  <!-- Arrow: Daemon → Phase 1 -->
+  <line x1="460" y1="290" x2="508" y2="290" class="flow" marker-end="url(#arrow)"/>
+
+  <!-- PHASE 1: Spec + Scenarios -->
+  <g transform="translate(510,180)">
+    <rect class="card-phase" x="0" y="0" width="280" height="220" rx="10"/>
+    <text x="140" y="22" text-anchor="middle" class="phase-label">Phase 1 — Spec &amp; Scenarios</text>
+
+    <rect class="card" x="16" y="38" width="248" height="46" rx="6"/>
+    <text x="30" y="56" class="num">01</text>
+    <text x="50" y="58" class="label">Spec Refiner</text>
+    <text x="50" y="74" class="label-sm">NLSpec — engineering-grade requirements</text>
+
+    <rect class="card" x="16" y="92" width="248" height="46" rx="6"/>
+    <text x="30" y="110" class="num">02</text>
+    <text x="50" y="112" class="label">Planner</text>
+    <text x="50" y="128" class="label-sm">dependency-aware task graph</text>
+
+    <rect class="card" x="16" y="146" width="248" height="46" rx="6"/>
+    <text x="30" y="164" class="num">03</text>
+    <text x="50" y="166" class="label">Scenario Designer</text>
+    <text x="50" y="182" class="label-sm">holdout scenarios (coder can't see)</text>
+
+    <text x="140" y="210" text-anchor="middle" class="label-sm">Opus 4.6 · post to board for approval</text>
+  </g>
+
+  <!-- Arrow: Phase 1 → Approval gate (dashed up to board) -->
+  <path d="M 650 180 Q 650 140 500 140 Q 215 140 215 240" class="flow-amber" marker-end="url(#arrow-amber)" fill="none"/>
+  <text x="430" y="132" text-anchor="middle" class="label-sm">post spec + scenarios</text>
+
+  <!-- Arrow: Phase 1 → Approval gate (right side) -->
+  <line x1="790" y1="290" x2="838" y2="290" class="flow" marker-end="url(#arrow)"/>
+
+  <!-- Approval Gate -->
+  <g transform="translate(840,250)">
+    <polygon points="0,40 40,0 80,40 40,80" class="card-accent"/>
+    <text x="40" y="36" text-anchor="middle" class="label">approve</text>
+    <text x="40" y="50" text-anchor="middle" class="label-sm">or revise</text>
+  </g>
+
+  <!-- Arrow: Approval Gate → Phase 2 -->
+  <line x1="920" y1="290" x2="968" y2="290" class="flow-amber" marker-end="url(#arrow-amber)"/>
+  <text x="944" y="308" text-anchor="middle" class="label-amber">approved</text>
+
+  <!-- PHASE 2: Build-Verify Loop -->
+  <g transform="translate(970,180)">
+    <rect class="card-phase" x="0" y="0" width="310" height="220" rx="10"/>
+    <text x="155" y="22" text-anchor="middle" class="phase-label">Phase 2 — Build-Verify Loop</text>
+
+    <!-- Coder -->
+    <rect class="card" x="20" y="44" width="110" height="60" rx="6"/>
+    <text x="75" y="68" text-anchor="middle" class="label">Coder</text>
+    <text x="75" y="88" text-anchor="middle" class="label-sm">opus → sonnet</text>
+
+    <!-- Verifier -->
+    <rect class="card" x="180" y="44" width="110" height="60" rx="6"/>
+    <text x="235" y="68" text-anchor="middle" class="label">Verifier</text>
+    <text x="235" y="88" text-anchor="middle" class="label-sm">playwright MCP</text>
+
+    <!-- Flow: Coder → Verifier -->
+    <line x1="130" y1="74" x2="180" y2="74" class="flow-amber" marker-end="url(#arrow-amber)"/>
+
+    <!-- Controller -->
+    <rect class="card" x="80" y="128" width="150" height="56" rx="6"/>
+    <text x="155" y="148" text-anchor="middle" class="label">Convergence Controller</text>
+    <text x="155" y="164" text-anchor="middle" class="label-sm">iterate or ship decision</text>
+    <text x="155" y="176" text-anchor="middle" class="label-sm">feedback (no scenario leak)</text>
+
+    <!-- Flow: Verifier → Controller -->
+    <path d="M 235 104 L 235 130 L 230 130" class="flow-amber" marker-end="url(#arrow-amber)" fill="none"/>
+    <!-- Flow: Controller → Coder (loop back) -->
+    <path d="M 80 156 L 40 156 L 40 74 L 75 74" class="flow-loop" marker-end="url(#arrow-amber)" fill="none"/>
+    <text x="30" y="120" text-anchor="middle" class="label-sm" fill="#E5961A">loop</text>
+
+    <text x="155" y="204" text-anchor="middle" class="label-sm">converges at satisfaction ≥ 0.85</text>
+  </g>
+
+  <!-- Arrow: Phase 2 → Ship -->
+  <line x1="1280" y1="290" x2="1328" y2="290" class="flow-amber" marker-end="url(#arrow-amber)"/>
+
+  <!-- Ship (PR Review + Merge) -->
+  <g transform="translate(1330,240)">
+    <rect class="card-accent" x="0" y="0" width="50" height="100" rx="6"/>
+    <text x="25" y="20" text-anchor="middle" class="label-amber">ship</text>
+    <text x="25" y="48" text-anchor="middle" class="label-sm">PR</text>
+    <text x="25" y="62" text-anchor="middle" class="label-sm">review</text>
+    <text x="25" y="76" text-anchor="middle" class="label-sm">merge</text>
+    <text x="25" y="90" text-anchor="middle" class="label-sm">CI</text>
+  </g>
+
+  <!-- Lower row: GitHub + AWS -->
+  <g transform="translate(410,460)">
+    <text x="0" y="0" class="phase-label">External — GitHub + AWS</text>
+
+    <!-- GitHub -->
+    <g transform="translate(0,16)">
+      <rect class="card" x="0" y="0" width="110" height="60" rx="6"/>
+      <circle cx="26" cy="30" r="10" fill="none" stroke="#c2c2c2" stroke-width="1.25"/>
+      <path d="M 26 20 Q 21 23 21 28 Q 21 34 26 34 Q 31 34 31 28 Q 31 23 26 20 M 22 36 L 22 40 M 30 36 L 30 40" fill="none" stroke="#c2c2c2" stroke-width="1"/>
+      <text x="50" y="28" class="label">GitHub</text>
+      <text x="50" y="42" class="label-sm">PR · Actions CI</text>
+    </g>
+
+    <!-- Arrow -->
+    <line x1="116" y1="46" x2="158" y2="46" class="flow" marker-end="url(#arrow)"/>
+
+    <!-- ECR -->
+    <g transform="translate(160,16)">
+      <rect class="card" x="0" y="0" width="100" height="60" rx="6"/>
+      <text x="50" y="28" text-anchor="middle" class="label">ECR</text>
+      <text x="50" y="42" text-anchor="middle" class="label-sm">docker images</text>
+    </g>
+
+    <!-- Arrow -->
+    <line x1="266" y1="46" x2="308" y2="46" class="flow" marker-end="url(#arrow)"/>
+
+    <!-- ECS Fargate -->
+    <g transform="translate(310,16)">
+      <rect class="card" x="0" y="0" width="120" height="60" rx="6"/>
+      <text x="60" y="28" text-anchor="middle" class="label">ECS Fargate</text>
+      <text x="60" y="42" text-anchor="middle" class="label-sm">production · ALB</text>
+    </g>
+
+    <!-- Arrow -->
+    <line x1="436" y1="46" x2="478" y2="46" class="flow-amber" marker-end="url(#arrow-amber)"/>
+
+    <!-- Production Verification -->
+    <g transform="translate(480,16)">
+      <rect class="card-accent" x="0" y="0" width="140" height="60" rx="6"/>
+      <text x="70" y="26" text-anchor="middle" class="label-amber">prod verify</text>
+      <text x="70" y="42" text-anchor="middle" class="label-sm">playwright + screenshots</text>
+      <text x="70" y="54" text-anchor="middle" class="label-sm">auto-rollback on fail</text>
+    </g>
+
+    <!-- Arrow: Prod verify → Done -->
+    <line x1="626" y1="46" x2="668" y2="46" class="flow-amber" marker-end="url(#arrow-amber)"/>
+
+    <!-- Done -->
+    <g transform="translate(670,16)">
+      <rect class="card" x="0" y="0" width="70" height="60" rx="6" stroke="#4ade80"/>
+      <text x="35" y="38" text-anchor="middle" class="label" fill="#4ade80">done</text>
+      <path d="M 22 42 L 30 50 L 48 32" stroke="#4ade80" stroke-width="1.5" fill="none"/>
+    </g>
+  </g>
+
+  <!-- Connection from Ship (top right) down to GitHub (bottom) -->
+  <path d="M 1355 340 L 1355 420 L 520 420 L 520 476" class="flow" marker-end="url(#arrow)" fill="none"/>
+  <text x="960" y="412" text-anchor="middle" class="label-sm">gh pr merge</text>
+
+  <!-- Self-healer badge (bottom left) -->
+  <g transform="translate(60,460)">
+    <text x="0" y="0" class="phase-label">Resilience</text>
+    <g transform="translate(0,16)">
+      <rect class="card" x="0" y="0" width="300" height="80" rx="6"/>
+      <text x="16" y="22" class="label">self-healing · auto-rollback · satisfaction ceiling</text>
+      <text x="16" y="40" class="label-sm">5 failures → Stuck → Tier 0 deterministic fix → Tier 1 Claude heal</text>
+      <text x="16" y="54" class="label-sm">prod fails → rollback to last-good → rebuild (×3) → escalate</text>
+      <text x="16" y="68" class="label-sm">sat ≥ 0.65 at exhaustion → auto-accept (Playwright limits)</text>
+    </g>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(1040,590)">
+    <line x1="0" y1="0" x2="24" y2="0" class="flow-amber"/>
+    <text x="30" y="4" class="label-sm">primary flow</text>
+    <line x1="110" y1="0" x2="134" y2="0" class="flow-loop"/>
+    <text x="140" y="4" class="label-sm">loop / feedback</text>
+    <line x1="230" y1="0" x2="254" y2="0" class="flow"/>
+    <text x="260" y="4" class="label-sm">secondary</text>
+  </g>
+</svg>

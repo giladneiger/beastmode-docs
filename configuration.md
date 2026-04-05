@@ -26,6 +26,11 @@ The Docker config uses `${ENV_VAR:-default}` interpolation — values are resolv
 | `convergence.max_precheck_retries` | `2` | NLSpec precheck retries before advancing iteration |
 | `cost.nlspec_precheck_enabled` | `true` | Enable cheap NLSpec compliance check before expensive verifier |
 | `cost.nlspec_precheck_model` | `claude-haiku-4-5-20251001` | Model for NLSpec pre-check (Haiku is ~25x cheaper than Opus) |
+| `cost.build_check_enabled` | `true` | Run a speculative build between coder and verifier; skip verifier if it fails |
+| `cost.build_check_command` | `"npm run build"` | Command executed for the speculative build check |
+| `cost.build_check_timeout_seconds` | `180` | Timeout for the speculative build check |
+| `cost.incremental_verification` | `true` | On iterations 2+, re-run only scenarios that failed previously; carry forward PASSes |
+| `cost.model_tiering_enabled` | `true` | Enable per-role model tiering (Opus/Sonnet/Haiku) |
 | `board.url` | `http://board:8080` | BeastMode Board URL (Docker internal) |
 | `deploy.ecr_repository` | `null` | ECR repository URI for Docker images |
 | `deploy.ecs_cluster` | `null` | ECS cluster for deployment and rollback |
@@ -37,6 +42,52 @@ The Docker config uses `${ENV_VAR:-default}` interpolation — values are resolv
 | `migration_safety.allow_override` | `true` | Let humans bypass blocks with "proceed anyway" |
 | `stack.name` | `"node"` | Tech stack (node, python, go, rust, java) |
 | `stack.build_command` | `"npm run build"` | Build command for the target project |
+
+### Model tiering (`models.*`)
+
+Per-role model assignments. `null` inherits the default model (currently Opus 4.6). Override to control cost vs. capability per stage.
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `models.spec` | `null` | Spec/Planner/Scenario Designer (Phase 1) |
+| `models.coder_initial` | `null` | Coder for iteration 1 of the build loop |
+| `models.coder_iteration` | `claude-sonnet-4-6` | Coder for iterations 2+ (already has feedback) |
+| `models.verifier` | `claude-sonnet-4-6` | Scenario Runner (Playwright verification) |
+| `models.review` | `claude-sonnet-4-6` | Automated PR reviewer |
+| `models.healing` | `claude-sonnet-4-6` | Self-healing for Stuck tasks |
+
+### Concurrency (`concurrency.*`)
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `concurrency.enabled` | `true` | Allow more than one slot to run Claude subprocesses concurrently |
+| `concurrency.max_playwright_sessions` | `1` | Cap on simultaneous Playwright MCP sessions (browsers are memory-heavy) |
+
+### Docker verification (`docker.*`)
+
+When a project ships as a Docker image, the verifier can run scenarios against a container instead of a dev server. This catches runtime/font/static-asset issues that only surface inside the image.
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `docker.build_verify_enabled` | `true` | Verify against a built Docker image instead of `npm run dev` |
+| `docker.verify_port` | `3001` | Host port the verifier container binds to |
+| `docker.build_timeout_seconds` | `600` | Timeout for `docker build` during verification |
+
+### SRE health gating (`sre.*`)
+
+The daemon probes production health before spawning expensive Playwright sessions. Unhealthy infrastructure skips verification and retries next cycle, preventing wasted LLM tokens on unreachable services.
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `sre.enabled` | `true` | Enable SRE health gate before production verification |
+| `sre.health_check_url` | `""` | HTTP endpoint for liveness probe (falls back to `deploy.health_check_url`) |
+| `sre.health_check_timeout_seconds` | `10` | Timeout for each SRE health probe |
+| `sre.systemic_failure_window` | `5` | Consecutive failures before classifying as systemic infra failure |
+| `sre.cache_ttl_seconds` | `120` | TTL for cached SRE probe results (avoids hammering the endpoint) |
+| `sre.auto_remediate` | `true` | Allow SRE to force-deploy or restart ECS when probes fail |
+| `sre.login_test_url` | `""` | Optional login URL for end-to-end auth probe |
+| `sre.login_test_email` | `""` | Email used by the login probe |
+| `sre.login_test_password_env` | `""` | Env var name that holds the login probe password |
 
 ## Project Structure
 

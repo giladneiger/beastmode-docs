@@ -13,7 +13,7 @@ The BeastMode source code is maintained in a separate private repository. This r
 - `_config.yml` — Jekyll config (plugins: `jekyll-optional-front-matter`, `jekyll-relative-links`)
 - `*.md` — documentation pages, auto-rendered by Jekyll on GitHub Pages
 - `assets/logo/` — brand SVG logos (icon, horizontal, dark/light variants, favicon)
-- `assets/architecture-diagram.png` — pipeline architecture overview
+- `assets/architecture-diagram.svg` — pipeline architecture overview (editable vector)
 
 ## Local preview
 

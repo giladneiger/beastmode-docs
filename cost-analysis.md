@@ -1,10 +1,17 @@
 # Cost Analysis
 
-The daemon spawns 15 distinct Claude subprocesses across the pipeline. All use **Claude Opus 4.6** at [$5/MTok input, $25/MTok output](https://platform.claude.com/docs/en/about-claude/pricing) (with prompt caching: $6.25 write, $0.50 read per MTok).
+BeastMode is a 13-agent pipeline that spawns Claude subprocesses for each stage (spec, coder, verifier, PR reviewer, production verifier, healer, etc.). Pricing is [$5/MTok input, $25/MTok output for Opus 4.6](https://platform.claude.com/docs/en/about-claude/pricing) — Sonnet 4.6 is ~5x cheaper and Haiku 4.5 is ~25x cheaper.
+
+**Model tiering is enabled by default** (`cost.model_tiering_enabled: true`). The pipeline uses:
+- **Opus 4.6** — spec phase (Refiner/Planner/Scenario Designer) and coder iteration 1
+- **Sonnet 4.6** — coder iterations 2+, verifier, PR reviewer, self-healing
+- **Haiku 4.5** — NLSpec pre-check (diff-vs-spec compliance)
+
+See `models.*` in `config/beastmode.daemon.json` for the per-role model assignments.
 
 ## Per-Step Token Estimates
 
-Each Claude subprocess incurs a ~23K token system prompt overhead (Claude Code base + tool definitions). With prompt caching, this costs ~$0.14 on first call and ~$0.01 on subsequent calls within the cache window.
+Each Claude subprocess incurs a ~23K token system prompt overhead (Claude Code base + tool definitions). With prompt caching, this costs ~$0.14 on first call and ~$0.01 on subsequent calls within the cache window. Costs below assume the default model tiering.
 
 | Step | Input Tokens | Output Tokens | Est. Cost | Notes |
 |------|-------------|--------------|-----------|-------|
