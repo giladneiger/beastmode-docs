@@ -25,7 +25,7 @@ The Docker config uses `${ENV_VAR:-default}` interpolation — values are resolv
 | `convergence.infra_retry_max` | `3` | Max infra-failure retries per iteration (no iteration counter increment) |
 | `convergence.max_precheck_retries` | `2` | NLSpec precheck retries before advancing iteration |
 | `cost.nlspec_precheck_enabled` | `true` | Enable cheap NLSpec compliance check before expensive verifier |
-| `cost.nlspec_precheck_model` | `claude-haiku-4-5-20251001` | Model for NLSpec pre-check (Haiku is ~25x cheaper than Opus) |
+| `cost.nlspec_precheck_model` | `claude-haiku-4-5-20251001` | Model for NLSpec pre-check (Haiku is 5x cheaper than Opus) |
 | `cost.build_check_enabled` | `true` | Run a speculative build between coder and verifier; skip verifier if it fails |
 | `cost.build_check_command` | `"npm run build"` | Command executed for the speculative build check |
 | `cost.build_check_timeout_seconds` | `180` | Timeout for the speculative build check |

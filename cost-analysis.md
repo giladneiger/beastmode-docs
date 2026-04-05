@@ -1,6 +1,14 @@
 # Cost Analysis
 
-BeastMode is a 13-agent pipeline that spawns Claude subprocesses for each stage (spec, coder, verifier, PR reviewer, production verifier, healer, etc.). Pricing is [$5/MTok input, $25/MTok output for Opus 4.6](https://platform.claude.com/docs/en/about-claude/pricing) — Sonnet 4.6 is ~5x cheaper and Haiku 4.5 is ~25x cheaper.
+BeastMode is a 13-agent pipeline that spawns Claude subprocesses for each stage (spec, coder, verifier, PR reviewer, production verifier, healer, etc.). [Claude API pricing](https://platform.claude.com/docs/en/about-claude/pricing) per million tokens:
+
+| Model | Input | Output | Relative to Opus 4.6 |
+|-------|------:|-------:|:---------------------|
+| Claude Opus 4.6 | $5 | $25 | — |
+| Claude Sonnet 4.6 | $3 | $15 | ~40% cheaper (1.67x) |
+| Claude Haiku 4.5 | $1 | $5 | 80% cheaper (5x) |
+
+Prompt caching reads are 0.1x the base input rate, and 5-minute cache writes are 1.25x — a cache hit after one subsequent call already pays for the write.
 
 **Model tiering is enabled by default** (`cost.model_tiering_enabled: true`). The pipeline uses:
 - **Opus 4.6** — spec phase (Refiner/Planner/Scenario Designer) and coder iteration 1
@@ -62,7 +70,7 @@ Typical (2 iterations, smooth pipeline)     ~$12-18
 
 **Incremental verification + build check** — when a speculative build check fails, it writes a pseudo-satisfaction file with a single "build_check" scenario. The incremental verification system (`_find_last_real_verification()`) skips these pseudo-iterations when looking for the last real verifier run, ensuring that iteration N+1 correctly re-runs only the scenarios that failed in the last actual verification, not just the build-check pseudo-scenario.
 
-**Model tiering** — Phase 2 uses Opus for the first coder iteration (highest capability for initial implementation) and Sonnet for iterations 2+ (cheaper, the coder already has feedback). The NLSpec pre-check uses Haiku (~25x cheaper than Opus) since it's a simple diff-vs-spec comparison.
+**Model tiering** — Phase 2 uses Opus for the first coder iteration (highest capability for initial implementation) and Sonnet for iterations 2+ (~40% cheaper, the coder already has feedback). The NLSpec pre-check uses Haiku (5x cheaper than Opus) since it's a simple diff-vs-spec comparison.
 
 ## CI: Self-Hosted Runner
 
