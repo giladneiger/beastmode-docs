@@ -25,6 +25,35 @@
   --font-sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'SF Mono', 'Fira Code', 'JetBrains Mono', Consolas, monospace;
 }
+html.light {
+  --bg: #f8f8f8;
+  --surface: #ffffff;
+  --border: #e0e0e0;
+  --divider: #e8e8e8;
+  --muted: #777;
+  --secondary: #555;
+  --body: #333;
+  --text: #111;
+  --accent: #d48a00;
+  --accent-hover: #b87600;
+}
+html.light body {
+  background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.03) 1px, transparent 0);
+}
+html.light nav.top { background: rgba(248,248,248,0.92); }
+html.light .hero-terminal { box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+html.light .hero-terminal .term-head { background: #f0f0f0; }
+html.light .hero-logo .body { fill: #111; }
+html.light .hero-logo .win { fill: #fff; }
+html.light .hero-logo .wm { fill: #111; }
+html.light .hero-logo .sub { fill: #777; }
+html.light .code-block { background: #1e1e1e; }
+html.light ::selection { background: rgba(212,138,0,0.2); }
+html.light footer { background: #f0f0f0; }
+html.light nav.top .logo text[fill="#f0f0f0"] { fill: #111; }
+html.light nav.top .logo rect[fill="#f0f0f0"] { fill: #222; }
+html.light nav.top .logo text[fill="#555"] { fill: #888; }
+html.light footer svg path[fill="#f0f0f0"] { fill: #222; }
 
 html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 body {
@@ -57,6 +86,25 @@ nav.top .links a { color: var(--secondary); }
 nav.top .links a:hover { color: var(--text); }
 nav.top .links a.accent { color: var(--accent); }
 nav.top .links a.accent:hover { color: var(--accent-hover); }
+
+/* Theme toggle */
+.theme-toggle {
+  position: relative; display: inline-flex; align-items: center; gap: 6px;
+  cursor: pointer; font-family: var(--font-mono); font-size: 11px; color: var(--muted);
+  user-select: none; -webkit-user-select: none;
+}
+.theme-toggle:hover { color: var(--text); }
+.theme-toggle .track {
+  width: 32px; height: 18px; border-radius: 9px;
+  background: var(--border); position: relative; transition: background 0.2s;
+}
+.theme-toggle .knob {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--muted); position: absolute; top: 2px; left: 2px;
+  transition: transform 0.2s, background 0.2s;
+}
+html.light .theme-toggle .track { background: var(--accent); }
+html.light .theme-toggle .knob { transform: translateX(14px); background: #fff; }
 
 /* ── Layout ── */
 main { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
@@ -220,6 +268,7 @@ footer .right a:hover { color: var(--body); }
   footer { flex-direction: column; gap: 12px; align-items: flex-start; }
 }
 </style>
+<script>if(localStorage.getItem('beastmode-docs-theme')==='light')document.documentElement.classList.add('light');</script>
 </head>
 <body>
 
@@ -259,6 +308,9 @@ footer .right a:hover { color: var(--body); }
     <a href="#architecture">architecture</a>
     <a href="#quickstart">quickstart</a>
     <a href="https://github.com/develeap/beastmode" class="accent" target="_blank" rel="noopener">github</a>
+    <span class="theme-toggle" id="themeToggle" role="switch" aria-checked="false" aria-label="Toggle light mode" tabindex="0">
+      <span class="track"><span class="knob"></span></span>
+    </span>
   </div>
 </nav>
 
@@ -503,6 +555,29 @@ wireCopy('copyBtn', 'quickstart-code');
       panes.forEach(function(p) { p.classList.toggle('hidden', p.getAttribute('data-pane') !== target); });
     });
   });
+})();
+
+// Theme toggle (persists via localStorage)
+(function() {
+  var toggle = document.getElementById('themeToggle');
+  var html = document.documentElement;
+  var stored = localStorage.getItem('beastmode-docs-theme');
+  if (stored === 'light') html.classList.add('light');
+  if (toggle) {
+    function update() {
+      var isLight = html.classList.contains('light');
+      toggle.setAttribute('aria-checked', isLight ? 'true' : 'false');
+    }
+    update();
+    toggle.addEventListener('click', function() {
+      html.classList.toggle('light');
+      localStorage.setItem('beastmode-docs-theme', html.classList.contains('light') ? 'light' : 'dark');
+      update();
+    });
+    toggle.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle.click(); }
+    });
+  }
 })();
 </script>
 
