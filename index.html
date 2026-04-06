@@ -81,8 +81,8 @@ nav.top {
   display: flex; align-items: center; justify-content: space-between;
   overflow-x: hidden;
 }
-nav.top .logo { height: 56px; display: block; }
-nav.top .links { display: flex; gap: 28px; font-family: var(--font-mono); font-size: 13px; }
+nav.top .logo { height: 56px; display: block; flex-shrink: 1; min-width: 0; }
+nav.top .links { display: flex; gap: 28px; font-family: var(--font-mono); font-size: 13px; flex-shrink: 0; }
 nav.top .links a { color: var(--secondary); }
 nav.top .links a:hover { color: var(--text); }
 nav.top .links a.accent { color: var(--accent); }
@@ -271,7 +271,7 @@ footer .right a:hover { color: var(--body); }
   nav.top { padding: 8px 12px; }
   nav.top .links { gap: 8px; font-size: 10px; }
   .nav-hide-sm { display: none !important; }
-  nav.top .logo { height: 32px; }
+  nav.top .logo { height: 28px; max-width: 180px; }
   main { padding: 0 14px; }
   .hero { padding-top: 32px; padding-bottom: 40px; }
   .hero-logo { width: 160px; margin-bottom: 20px; }
