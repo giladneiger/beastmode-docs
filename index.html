@@ -79,6 +79,7 @@ nav.top {
   border-bottom: 0.5px solid var(--divider);
   padding: 14px 40px;
   display: flex; align-items: center; justify-content: space-between;
+  overflow-x: hidden;
 }
 nav.top .logo { height: 56px; display: block; }
 nav.top .links { display: flex; gap: 28px; font-family: var(--font-mono); font-size: 13px; }
@@ -233,38 +234,51 @@ footer .right a:hover { color: var(--body); }
   section { padding: 64px 0; }
 }
 @media (max-width: 768px) {
-  nav.top { padding: 12px 22px; }
-  nav.top .links { gap: 16px; font-size: 12px; }
-  nav.top .logo { height: 44px; }
-  main { padding: 0 22px; }
+  nav.top { padding: 10px 16px; }
+  nav.top .links { gap: 14px; font-size: 11px; }
+  nav.top .logo { height: 38px; }
+  main { padding: 0 18px; }
   section { padding: 48px 0; }
-  .hero { padding-top: 48px; padding-bottom: 56px; }
-  .hero-logo { width: 240px; margin-bottom: 32px; }
-  .hero h1 { font-size: 32px; }
-  .hero p.sub { font-size: 15px; }
+  .hero { padding-top: 40px; padding-bottom: 48px; }
+  .hero-logo { width: 200px; margin-bottom: 24px; }
+  .hero-attribution { margin-bottom: 32px; }
+  .hero h1 { font-size: 28px; letter-spacing: -0.5px; }
+  .hero p.sub { font-size: 14px; margin-bottom: 28px; }
+  .cta-row { gap: 10px; margin-bottom: 40px; }
+  .btn { padding: 12px 20px; font-size: 13px; }
   .hero-terminal { max-width: 100%; }
   .hero-terminal .term-head { flex-wrap: wrap; padding: 8px 12px; }
-  .hero-terminal .term-tabs { margin-left: 10px; }
-  .hero-terminal .term-tab { padding: 9px 12px; font-size: 10px; }
-  .hero-terminal .term-body { font-size: 11px; padding: 14px 16px; line-height: 1.85; }
+  .hero-terminal .term-tabs { margin-left: 8px; }
+  .hero-terminal .term-tab { padding: 8px 10px; font-size: 10px; }
+  .hero-terminal .term-body { font-size: 11px; padding: 14px 14px; line-height: 1.85; }
   .hero-terminal .term-body code { white-space: pre-wrap; word-break: break-word; }
-  .grid.cols-3 { grid-template-columns: repeat(2, 1fr); }
-  .caps { grid-template-columns: repeat(2, 1fr); }
+  .stats-bar { flex-direction: column; gap: 12px; }
+  .stats-bar .item { flex-wrap: wrap; gap: 6px; }
+  .grid.cols-3 { grid-template-columns: 1fr; }
+  .caps { grid-template-columns: 1fr; }
   .flow { gap: 8px; }
   .flow .chev { display: none; }
   .flow .step { min-width: 0; flex: 1 1 40%; padding: 12px 14px; }
-  .what-is p { font-size: 15px; }
-  footer { padding: 24px 22px; }
-}
-@media (max-width: 480px) {
-  nav.top .links { gap: 10px; }
-  .grid.cols-3, .grid.cols-2 { grid-template-columns: 1fr; }
-  .caps { grid-template-columns: 1fr; }
   .compare .row { grid-template-columns: 1fr; }
+  .compare .row .cell { padding: 12px 16px; font-size: 12px; }
   .compare .row .cell.right { border-left: none; border-top: 0.5px solid var(--accent); }
   .compare .head { display: none; }
-  .hero h1 { font-size: 24px; }
-  .stats-bar { gap: 18px; }
+  .what-is p { font-size: 14px; }
+  .section-label { font-size: 10px; letter-spacing: 2px; }
+  footer { padding: 24px 18px; }
+}
+@media (max-width: 480px) {
+  nav.top { padding: 8px 12px; }
+  nav.top .links { gap: 10px; font-size: 10px; }
+  nav.top .logo { height: 32px; }
+  main { padding: 0 14px; }
+  .hero { padding-top: 32px; padding-bottom: 40px; }
+  .hero-logo { width: 160px; margin-bottom: 20px; }
+  .hero h1 { font-size: 22px; }
+  .hero p.sub { font-size: 13px; }
+  .cta-row { flex-direction: column; align-items: stretch; }
+  .btn { text-align: center; }
+  .grid.cols-2 { grid-template-columns: 1fr; }
   footer { flex-direction: column; gap: 12px; align-items: flex-start; }
 }
 </style>
@@ -490,12 +504,10 @@ docker compose up
 
 <!-- REFERENCES -->
 <section>
-  <div class="section-label">REFERENCES</div>
+  <div class="section-label">BUILT WITH</div>
   <div class="refs">
-    <a href="https://simonwillison.net/2026/Feb/7/software-factory/" target="_blank" rel="noopener">StrongDM Software Factory</a>
-    <a href="https://simonwillison.net/2026/Jan/28/the-five-levels/" target="_blank" rel="noopener">The Five Levels of AI Coding (Dan Shapiro)</a>
-    <a href="https://github.com/strongdm/attractor" target="_blank" rel="noopener">Attractor (StrongDM)</a>
     <a href="https://claude.com/claude-code" target="_blank" rel="noopener">Claude Code</a>
+    <a href="https://develeap.com" target="_blank" rel="noopener">DevEleap</a>
   </div>
 </section>
 
