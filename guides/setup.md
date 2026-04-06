@@ -8,7 +8,7 @@ Deploys BeastMode to AWS with a single command. You need: AWS CLI configured, Cl
 
 ```bash
 # Clone BeastMode
-git clone https://github.com/giladneiger/beastmode.git
+git clone https://github.com/develeap/beastmode.git
 cd beastmode
 
 # Authenticate Claude Code (uses your subscription — no API key needed)
@@ -20,6 +20,19 @@ export GITHUB_TOKEN=ghp_...
 # Deploy to AWS
 npx beastmode deploy --cloud aws
 ```
+
+**What this creates on AWS:**
+
+| Resource | Purpose | Estimated Cost |
+|----------|---------|---------------|
+| EC2 t3.xlarge (4 vCPU / 16 GB) | Runs BeastMode (board + daemon + UI) | ~$120/month |
+| VPC + public subnet | Networking and internet access | Free |
+| Security group | Allows SSH (22) and board UI (8420) | Free |
+| Elastic IP | Stable public IP address | Free (while attached) |
+| Secrets Manager | Stores GitHub token and API keys | ~$0.40/month |
+| IAM role + instance profile | Allows EC2 to access AWS services | Free |
+
+The command uses **Terraform** under the hood — all infrastructure is defined in `infra/` and can be inspected, modified, or destroyed with `terraform destroy`. No hidden resources.
 
 Wait 3-5 minutes. BeastMode prints the URL and auto-generated password:
 
@@ -34,12 +47,14 @@ BeastMode Deployed!
 
 Open the URL, enter the password, and you're running. Skip to [Adding Your Project](#adding-your-project).
 
+**To tear down:** `npx beastmode deploy --destroy` runs `terraform destroy` and removes all AWS resources. You can also run `terraform destroy` directly in the `infra/` directory.
+
 ## Option 2: Docker Compose (Local or Server)
 
 Run BeastMode on any machine with Docker.
 
 ```bash
-git clone https://github.com/giladneiger/beastmode.git
+git clone https://github.com/develeap/beastmode.git
 cd beastmode
 
 # Authenticate Claude Code (uses your subscription — no API key needed)
@@ -80,7 +95,7 @@ For full control, install directly on a Linux server.
 
 ```bash
 # Clone
-git clone https://github.com/giladneiger/beastmode.git
+git clone https://github.com/develeap/beastmode.git
 cd beastmode
 
 # Initialize (interactive wizard)

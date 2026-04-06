@@ -258,7 +258,7 @@ footer .right a:hover { color: var(--body); }
     <a href="#docs">docs</a>
     <a href="#architecture">architecture</a>
     <a href="#quickstart">quickstart</a>
-    <a href="https://github.com/giladneiger/beastmode-docs" class="accent" target="_blank" rel="noopener">github</a>
+    <a href="https://github.com/develeap/beastmode" class="accent" target="_blank" rel="noopener">github</a>
   </div>
 </nav>
 
@@ -302,7 +302,7 @@ footer .right a:hover { color: var(--body); }
   <p class="sub">The autonomous pipeline that turns natural language into verified, deployed code. No code review. No manual QA. No human in the loop during execution.</p>
   <div class="cta-row">
     <a href="#quickstart" class="btn primary">Get started</a>
-    <a href="https://github.com/giladneiger/beastmode-docs" class="btn secondary" target="_blank" rel="noopener">$ docker compose up</a>
+    <a href="https://github.com/develeap/beastmode" class="btn secondary" target="_blank" rel="noopener">View on GitHub</a>
   </div>
   <aside class="hero-terminal">
     <div class="term-head">
@@ -312,14 +312,14 @@ footer .right a:hover { color: var(--body); }
         <button class="term-tab" role="tab" data-tab="claude">✨ let Claude do it</button>
       </div>
     </div>
-    <div class="term-body term-pane" data-pane="docker"><code><span class="prompt">$</span> git clone https://github.com/giladneiger/beastmode.git &amp;&amp; cd beastmode
+    <div class="term-body term-pane" data-pane="docker"><code><span class="prompt">$</span> git clone https://github.com/develeap/beastmode.git &amp;&amp; cd beastmode
 <span class="prompt">$</span> cp .env.example .env   <span class="cmt"># add your GITHUB_TOKEN</span>
 <span class="prompt">$</span> docker compose up
   <span class="accent">→</span> board UI:  http://localhost:8420
   <span class="accent">→</span> post a task. beastmode ships it.</code></div>
     <div class="term-body term-pane hidden" data-pane="claude"><code><span class="prompt">$</span> claude
 <span class="cmt"># paste this prompt:</span>
-<span class="accent">&gt;</span> install beastmode (https://github.com/giladneiger/beastmode)
+<span class="accent">&gt;</span> install beastmode (https://github.com/develeap/beastmode)
   on this machine. check prereqs, set up .env, spin up docker,
   walk me through auth, verify it works.
   <span class="accent">→</span> zero manual edits. two minutes. done.</code></div>
@@ -362,18 +362,6 @@ footer .right a:hover { color: var(--body); }
   <img src="assets/architecture-diagram.svg" alt="BeastMode architecture — pipeline from board to production" class="arch-img" loading="lazy">
 </section>
 
-<!-- TASK TYPES -->
-<section>
-  <div class="section-label">TASK TYPES</div>
-  <div class="grid cols-3">
-    <div class="card"><div class="title">code <span style="color:var(--muted);font-weight:400;">(default)</span></div><div class="desc">Full pipeline: spec → build → ship → deploy</div></div>
-    <div class="card"><div class="title">epic</div><div class="desc">Epic decomposition → ordered stories</div></div>
-    <div class="card"><div class="title">deep-planning</div><div class="desc">Iterative Q&amp;A → comprehensive decomposition</div></div>
-    <div class="card"><div class="title">infra-plan</div><div class="desc">Infrastructure planning → sub-tasks</div></div>
-    <div class="card"><div class="title">infrastructure</div><div class="desc">Terraform apply + verification</div></div>
-  </div>
-</section>
-
 <!-- DOCUMENTATION -->
 <section id="docs">
   <div class="section-label">DOCUMENTATION</div>
@@ -394,7 +382,7 @@ footer .right a:hover { color: var(--body); }
   <div class="code-block">
     <button class="copy-btn" id="copyBtn">COPY</button>
     <code id="quickstart-code"><span class="cmt"># clone + configure</span>
-git clone https://github.com/giladneiger/beastmode.git
+git clone https://github.com/develeap/beastmode.git
 cd beastmode
 cp .env.example .env   <span class="cmt"># edit with your API keys + project path</span>
 
@@ -441,7 +429,7 @@ docker compose up
     <div class="cap">Tiered self-healing (0 tokens → Claude-assisted)</div>
     <div class="cap">Epic orchestration with approval cascading</div>
     <div class="cap">Database migration safety gate</div>
-    <div class="cap">Fail-fast on low satisfaction (&lt; 0.3)</div>
+    <div class="cap">Satisfaction threshold: 0.85 convergence, 0.65 acceptance floor</div>
     <div class="cap">Haiku pre-check before expensive verifier</div>
     <div class="cap">Self-hosted GitHub Actions runner</div>
     <div class="cap">Auto-rollback on production failure</div>
@@ -471,7 +459,7 @@ docker compose up
       <span>manufactured by develeap</span>
     </a>
   </div>
-  <div class="right">MIT license — <a href="https://github.com/giladneiger/beastmode-docs" target="_blank" rel="noopener">github.com/giladneiger/beastmode-docs</a></div>
+  <div class="right">MIT license — <a href="https://github.com/develeap/beastmode" target="_blank" rel="noopener">github.com/develeap/beastmode</a></div>
 </footer>
 
 <script>
