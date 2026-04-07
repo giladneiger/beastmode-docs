@@ -257,7 +257,7 @@ No `ANTHROPIC_API_KEY` needed — everything works with just `claude login`. Set
 | Component | Cost | Notes |
 |-----------|------|-------|
 | EC2 (t3.xlarge) | ~$120/month | BeastMode instance (4 vCPU / 16 GB — recommended) |
-| Claude (subscription or API) | ~$2-10 per task | Depends on complexity and iterations |
+| Claude Code subscription | Included in plan | Max/Team plan covers all AI usage |
 | Idle polling | $0 | No AI cost when no tasks are running |
 | ECR | ~$1/month | Container image storage |
 | ECS + RDS (if deployed) | ~$80/month | Your application's infrastructure |
