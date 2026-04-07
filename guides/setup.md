@@ -1,8 +1,47 @@
 # Setting Up BeastMode — From Zero to Running Factory
 
-Three ways to run BeastMode, from simplest to most production-ready.
+Four ways to run BeastMode, from simplest to most production-ready.
 
-## Option 1: One-Command Cloud Deploy (Recommended)
+## Option 0: Image Mode (Recommended)
+
+Run BeastMode from pre-built Docker images — no source clone needed. You need: Node.js 20+, Docker, access to the `@develeap` npm org, and GHCR access (GitHub PAT with `read:packages` scope).
+
+```bash
+# Install the CLI
+npm install -g @develeap/beastmode
+
+# Authenticate to pull private Docker images
+docker login ghcr.io
+# Username: your GitHub username
+# Password: your GitHub PAT (with read:packages scope)
+
+# Initialize — generates docker-compose.yml, .env, pulls images
+beastmode init
+
+# Start all services
+beastmode up
+```
+
+`beastmode init` is interactive — it walks you through setting your GitHub token, optional Anthropic API key, and board password. After init, `beastmode up` starts three containers (board, UI, daemon) and the board UI is available at `http://localhost:8420`.
+
+### Managing Services
+
+```bash
+beastmode up              # Start all services
+beastmode down            # Stop all services
+beastmode logs            # View daemon logs
+beastmode update          # Pull latest images and restart
+beastmode doctor          # Health check
+```
+
+### Upgrading
+
+```bash
+npm update -g @develeap/beastmode   # Update the CLI
+beastmode update                     # Pull latest Docker images and restart
+```
+
+## Option 1: One-Command Cloud Deploy
 
 Deploys BeastMode to AWS with a single command. You need: AWS CLI configured, Claude Code authenticated (`claude login`), GitHub token.
 
@@ -51,6 +90,8 @@ Open the URL, enter the password, and you're running. Skip to [Adding Your Proje
 
 ## Option 2: Docker Compose (Local or Server)
 
+> **Note:** For contributors working from source. If you don't need the source code, use Option 0 instead.
+
 Run BeastMode on any machine with Docker.
 
 ```bash
@@ -77,6 +118,8 @@ open http://localhost:8420
 The board UI runs at `:8420`, the board API at `:8080`. No password needed when running locally.
 
 ## Option 3: Bare Metal (EC2 / Linux Server)
+
+> **Note:** For contributors working from source. If you don't need the source code, use Option 0 instead.
 
 For full control, install directly on a Linux server.
 

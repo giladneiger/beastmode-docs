@@ -168,8 +168,11 @@ beastmode/
       models.py                        #   Pydantic models
     Dockerfile                         #   Board container image
     tests/                             #   Board tests (pytest + Playwright)
-  docker-compose.yml                   # Runs board + daemon containers
-  Dockerfile (daemon/)                 # Daemon container (Python + Chrome + Claude CLI)
+  docker-compose.yml                   # Runs board + ui + daemon containers
+  .github/workflows/docker-publish.yml # CI: builds + pushes Docker images to GHCR
+  board/Dockerfile                     # Board container (multi-stage, no source in image)
+  daemon/Dockerfile                    # Daemon container (multi-stage, no source in image)
+  cli/Dockerfile                       # UI container (multi-stage, no source in image)
   .env.example                         # Template for environment variables
   infra/                               # Terraform (VPC, EC2, ECS, RDS, ECR)
     playbooks/                         # Reference Terraform modules (ECR, ECS, RDS, Redis)

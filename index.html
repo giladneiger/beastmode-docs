@@ -375,13 +375,14 @@ footer .right a:hover { color: var(--body); }
     <div class="term-head">
       <span class="dot red"></span><span class="dot amber"></span><span class="dot green"></span>
       <div class="term-tabs" role="tablist">
-        <button class="term-tab active" role="tab" data-tab="docker">$ docker compose up</button>
+        <button class="term-tab active" role="tab" data-tab="docker">$ beastmode init</button>
         <button class="term-tab" role="tab" data-tab="claude">✨ let Claude do it</button>
       </div>
     </div>
-    <div class="term-body term-pane" data-pane="docker"><code><span class="prompt">$</span> git clone https://github.com/develeap/beastmode.git &amp;&amp; cd beastmode
-<span class="prompt">$</span> cp .env.example .env   <span class="cmt"># add your GITHUB_TOKEN</span>
-<span class="prompt">$</span> docker compose up
+    <div class="term-body term-pane" data-pane="docker"><code><span class="prompt">$</span> npm install -g @develeap/beastmode
+<span class="prompt">$</span> docker login ghcr.io   <span class="cmt"># authenticate to pull images</span>
+<span class="prompt">$</span> beastmode init          <span class="cmt"># generates config, pulls images</span>
+<span class="prompt">$</span> beastmode up
   <span class="accent">→</span> board UI:  http://localhost:8420
   <span class="accent">→</span> post a task. beastmode ships it.</code></div>
     <div class="term-body term-pane hidden" data-pane="claude"><code><span class="prompt">$</span> claude
@@ -433,7 +434,7 @@ footer .right a:hover { color: var(--body); }
 <section id="docs">
   <div class="section-label">DOCUMENTATION</div>
   <div class="grid cols-3">
-    <a class="card" href="guides/setup.md"><div class="title">Setup Guide</div><div class="desc">Three ways to deploy: cloud, Docker, bare metal</div></a>
+    <a class="card" href="guides/setup.md"><div class="title">Setup Guide</div><div class="desc">Four ways to deploy: image mode, cloud, Docker, bare metal</div></a>
     <a class="card" href="getting-started.md"><div class="title">Getting Started</div><div class="desc">Create tasks, task types, tips, FAQ</div></a>
     <a class="card" href="pipeline.md"><div class="title">Pipeline</div><div class="desc">Step-by-step walkthrough of all pipeline types</div></a>
     <a class="card" href="resilience.md"><div class="title">Resilience</div><div class="desc">Self-healing, auto-rollback, SRE gating, crash recovery</div></a>
@@ -448,13 +449,13 @@ footer .right a:hover { color: var(--body); }
   <div class="section-label">QUICK START</div>
   <div class="code-block">
     <button class="copy-btn" id="copyBtn">COPY</button>
-    <code id="quickstart-code"><span class="cmt"># clone + configure</span>
-git clone https://github.com/develeap/beastmode.git
-cd beastmode
-cp .env.example .env   <span class="cmt"># edit with your API keys + project path</span>
+    <code id="quickstart-code"><span class="cmt"># install</span>
+npm install -g @develeap/beastmode
+docker login ghcr.io   <span class="cmt"># use GitHub PAT with read:packages scope</span>
 
-<span class="cmt"># run</span>
-docker compose up
+<span class="cmt"># set up + run</span>
+beastmode init          <span class="cmt"># generates docker-compose.yml, pulls images</span>
+beastmode up
 
 <span class="cmt"># Open </span><span class="str">http://localhost:8420</span><span class="cmt"> for the board UI</span>
 <span class="cmt"># Create a task → BeastMode picks it up automatically</span></code>

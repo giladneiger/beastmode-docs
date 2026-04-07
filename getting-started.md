@@ -6,7 +6,7 @@ BeastMode is a Dark Factory that turns task descriptions into verified, deployed
 
 ### 1. Access the Board
 
-Open the BeastMode Board UI in your browser. Ask your admin for the URL and password.
+Open the BeastMode Board UI in your browser at `http://localhost:8420` (or ask your admin for the URL and password). If BeastMode isn't running yet, start it with `beastmode up`.
 
 ### 2. Add Your Project
 
@@ -79,7 +79,7 @@ When the task reaches **Waiting for Approval**, BeastMode has written a spec and
 | Task stuck in "Working on it" for hours | The daemon may have restarted. It auto-recovers, or comment "reset" |
 | Spec doesn't match what I wanted | Provide feedback in the approval step — be specific about what to change |
 | Wrong code generated | The spec probably drifted. Reset the task and write a clearer description |
-| "Daemon: stopped" in the status bar | Contact your admin — the daemon service needs to be restarted |
+| "Daemon: stopped" in the status bar | Run `beastmode up` to restart, or contact your admin |
 | Can't see my project's board | Switch projects using the dropdown in the sidebar |
 
 ## FAQ
