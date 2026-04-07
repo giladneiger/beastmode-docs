@@ -4,11 +4,11 @@ Four ways to run BeastMode, from simplest to most production-ready.
 
 ## Option 0: Image Mode (Recommended)
 
-Run BeastMode from pre-built Docker images — no source clone needed. You need: Node.js 20+, Docker, access to the `@develeap` npm org, and GHCR access (GitHub PAT with `read:packages` scope).
+Run BeastMode from pre-built Docker images — no source clone needed. You need: Node.js 20+, Docker, and GHCR access (GitHub PAT with `read:packages` scope).
 
 ```bash
 # Install the CLI
-npm install -g @develeap/beastmode
+npm install -g @beastmode-develeap/beastmode
 
 # Authenticate to pull private Docker images
 docker login ghcr.io
@@ -37,7 +37,7 @@ beastmode doctor          # Health check
 ### Upgrading
 
 ```bash
-npm update -g @develeap/beastmode   # Update the CLI
+npm update -g @beastmode-develeap/beastmode   # Update the CLI
 beastmode update                     # Pull latest Docker images and restart
 ```
 
