@@ -385,9 +385,11 @@ footer .right a:hover { color: var(--body); }
   <span class="accent">→</span> post a task. beastmode ships it.</code></div>
     <div class="term-body term-pane hidden" data-pane="claude"><code><span class="prompt">$</span> claude
 <span class="cmt"># paste this prompt:</span>
-<span class="accent">&gt;</span> install beastmode — run `npm install -g @beastmode-develeap/beastmode`,
-  help me log in to ghcr.io, then `beastmode init` and
-  `beastmode up`. walk me through auth, verify it works.
+<span class="accent">&gt;</span> set up beastmode on this machine.
+  npm install -g @beastmode-develeap/beastmode
+  ask me for my GitHub token, then run
+  beastmode init --github-token &lt;TOKEN&gt; --yes
+  then beastmode up. verify it works.
   <span class="accent">→</span> zero manual edits. two minutes. done.</code></div>
   </aside>
 </section>
