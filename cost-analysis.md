@@ -19,11 +19,31 @@ Most users should use the Claude Code subscription. The API key is an optional o
 
 **Model tiering is enabled by default** (`cost.model_tiering_enabled: true`). The pipeline uses different models per role to balance capability and cost:
 
-- **Opus 4.6** — spec phase (Refiner/Planner/Scenario Designer) and coder iteration 1
+- **Opus 4.7** (or **Opus 4.6**) — spec phase (Refiner/Planner/Scenario Designer) and coder iteration 1
 - **Sonnet 4.6** — coder iterations 2+, verifier, PR reviewer, self-healing
 - **Haiku 4.5** — NLSpec pre-check (diff-vs-spec compliance)
 
-See `models.*` in `config/beastmode.daemon.json` for the per-role model assignments.
+See `models.*` in `config/beastmode.daemon.json` for the per-role model assignments. The pricing table lives in `daemon/beastmode_daemon/token_usage.py` and tracks per-model rates for input, output, cache-read, and cache-write tokens separately.
+
+### Cost Attribution and Visibility
+
+Every Claude invocation is captured in the `run_costs` table with item_id, run_id, phase, iteration, model, token breakdown, computed `cost_usd`, and a **purpose-axis** `cost_category`:
+
+| Category | Set when |
+|----------|----------|
+| `productive` | Default — first-pass work on a task |
+| `retry` | Build-verify iteration > 1 (the work being re-done because of a previous failure) |
+| `heal` | Healing-attempt invocations (Tier 0 or Tier 2) |
+| `bug_gc_followup` | Bug GC child tasks (work to close residual failures from a parent) |
+| `wasted_decomposition` | Epic decomposition that short-circuited because children already exist |
+
+This taxonomy distinguishes "what kind of work" from "where in the pipeline" — so an operator can see at a glance how much spend went to retries vs healing vs the productive first pass, not just how much went to each phase. Bug GC child costs roll up to their parent via `parent_task`, so a Done item's reported cost includes the cost of every follow-up bug-fix child it spawned.
+
+The board UI surfaces costs three ways:
+
+- **Per-card cost badges** — every item on the kanban shows its current total spend as a small badge
+- **Per-item detail panel** — expanded breakdown by iteration and category, including descendant rollup for parents
+- **`/costs` dashboard** — factory-wide view with an "in-flight" widget showing items currently spending (so you can spot a runaway build before the circuit breaker trips)
 
 ## Per-Step Resource Usage
 

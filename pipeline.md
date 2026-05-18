@@ -12,7 +12,7 @@ If the task has file attachments (images, documents, specs), BeastMode downloads
 
 The daemon spawns a Claude process that runs three stages sequentially:
 
-**Spec Refiner** takes the task title and description and produces `nlspec.md` — an engineering-grade specification precise enough that any developer (human or AI) could implement from it without further clarification. It includes data models, API contracts, state machines, error handling, and explicit out-of-scope items.
+**Spec Refiner** takes the task title and description and produces `nlspec.md` — an engineering-grade specification precise enough that any developer (human or AI) could implement from it without further clarification. It includes data models, API contracts, state machines, error handling, and explicit out-of-scope items. The spec prompt is enriched with **smart wisdom injection** — relevant learnings from past tasks, filtered by domain tags (auth, db, css, api, ui, infra, etc.) and temporal decay (recent learnings always included; older ones require HIGH severity or strong tag overlap). This prevents repeating mistakes across tasks. For brownfield projects, the cached **codebase guide** (L0/L1/L2) is loaded into context so the spec respects existing architecture and conventions instead of re-deriving them.
 
 **Planner** reads the NLSpec and produces `plan.md` — a dependency-aware task graph. Each task is atomic, has acceptance criteria, and references the specific NLSpec sections it implements.
 
@@ -31,12 +31,13 @@ Human comments are interpreted agentically by Claude — not regex matching. Bot
 
 After approval, the daemon spawns another Claude process for the build-verify loop:
 
-**Coder agents** implement the plan. They work in git worktrees to prevent conflicts during parallel work. They can see the plan and the NLSpec, but they **cannot see the scenarios**. This is the information barrier — physical repo separation plus hooks enforcement. Before exiting, each coder runs a **mandatory self-check**: `npm run build` must pass, every NLSpec requirement must be implemented (not stubbed), and a sanity check of the diff (no debug logs, no TODOs, no import errors). This catches build failures and NLSpec gaps within the same Claude session at zero extra cost.
+**Coder agents** implement the plan. They work in git worktrees to prevent conflicts during parallel work. They can see the plan and the NLSpec, but they **cannot see the scenarios**. This is the information barrier — physical repo separation plus hooks enforcement. The coder prompt also receives **smart wisdom injection** — relevant learnings from past tasks filtered by domain tags, with a 1500-token budget. Coders are also prompted to **update documentation** (README, docs/, CLI help) when changes affect user-facing behavior. Before exiting, each coder runs a **mandatory self-check**: `npm run build` must pass, every NLSpec requirement must be implemented (not stubbed), and a sanity check of the diff (no debug logs, no TODOs, no import errors). This catches build failures and NLSpec gaps within the same Claude session at zero extra cost.
 
-After the coder finishes, two quality gates run before the expensive Scenario Runner:
+After the coder finishes, three quality gates run before the expensive Scenario Runner:
 
 1. **Speculative build check** — runs `npm run build` externally. If it fails, the verifier is skipped entirely (saves ~$2.50-10.00 per iteration).
 2. **NLSpec compliance pre-check** — a cheap Haiku model call (~$0.01) compares the git diff against the NLSpec. If it finds gaps (missing requirements, incomplete implementations), the verifier is skipped and the coder gets targeted feedback about exactly which NLSpec requirements are missing. This catches the exact issues that would later cause PR review rejection, saving a full verifier session. The pre-check **fails open** — if it crashes or times out, the verifier runs anyway. Controlled by `cost.nlspec_precheck_enabled` (default: true).
+3. **Coder scope fence** — checks the coder's diff against allowed file paths. The NLSpec can declare explicit `## In-scope paths`; otherwise, scope is inferred from prose. Certain paths are always forbidden (docker/*, infra/*, .env*, .github/workflows/*, terraform/*). If violations are found, the verifier is skipped and the coder gets feedback to restrict changes. The PR reviewer also hard-rejects scope violations. Controlled by `scope_fence.enabled` (default: true).
 
 **Scenario Runner** executes every holdout scenario against the running application using **Playwright MCP browser automation**. It navigates pages, clicks buttons, fills forms, reads DOM state, and takes screenshots as evidence. It produces a satisfaction score:
 
@@ -49,6 +50,8 @@ satisfaction = passed_scenarios / total_scenarios
 **Fail-fast on catastrophic first iteration** — if iteration 1 satisfaction is below 0.3 (configurable via `convergence.fail_fast_threshold`), the build loop aborts immediately and sends the task back to "Waiting for Spec & Scenarios Approval" for human review. This prevents burning 4 more iterations when the spec or plan itself is wrong. The failure counter is NOT incremented (this is a spec quality issue, not a code failure). Setting the threshold to 0.0 disables fail-fast.
 
 **Infrastructure failure detection** — when verification fails due to infrastructure issues (Bedrock unavailability, API rate limits, connection refused, 503 Service Unavailable, DNS failures, timeouts), the daemon retries the **same iteration** without incrementing the iteration counter. This prevents wasting iterations on transient environment problems. Infra retries are capped at `convergence.infra_retry_max` (default 3) per iteration. The detection uses pattern matching against known infra error signatures — code failures (TypeError, build errors, assertion failures) are never classified as infra.
+
+**Infrastructure failure classification** — each failed scenario receives a `failure_class` (code_bug, missing_env_var, missing_secret, external_service_down, infra_misconfigured, data_not_seeded, test_flake). The daemon computes **effective satisfaction** by excluding infra failures from the denominator — only code bugs count against the score. If all remaining failures are infrastructure gaps (not fixable by the coder), the task transitions to `stuck_infra_gap` with a human action list instead of wasting coder iterations. Coder feedback also excludes infra items. Controlled by `failure_classification.enabled` (default: true).
 
 If satisfaction >= 0.85, the loop exits. If the maximum iteration count (default 5) is reached, the pipeline halts and reports the current state.
 
@@ -177,3 +180,22 @@ BeastMode can provision its own production infrastructure. A single task like *"
 5. Infrastructure scenarios verify resources work (AWS CLI checks, connectivity, HTTP endpoints)
 
 Infrastructure playbooks in `infra/playbooks/` and CI templates in `ci-templates/` provide reference modules.
+
+## Bug GC Sweep
+
+When a task reaches **Done**, the daemon sweeps both the build-verify loop's final iteration **and** the production verification results for residual failures. Each distinct failing scenario spawns a **Bug GC child task** that runs a shortened pipeline targeting that specific failure:
+
+1. **Context injection** — parent NLSpec + the failed scenario + failure explanation
+2. **Build-verify loop** — coder fixes the single targeted bug; verifier runs only that scenario (threshold 1.0 — must pass cleanly)
+3. **Ship** — PR with the fix → automated PR review → production verification
+
+Bug GC child names include an origin tag so operators can distinguish failure sources at a glance:
+
+| Tag | Source |
+|-----|--------|
+| `[Bug GC][build] <item name> — <scenario id>` | Failure detected during the build-verify loop (e.g. a `code_review` scenario that passes in review but skips in production) |
+| `[Bug GC][prod] <item name> — <scenario id>` | Failure detected during production verification |
+
+When a scenario fails in **both** phases, the production-verification entry is used (richer diagnostic from the live environment). A production SKIP or PASS does **not** suppress a build-verify failure.
+
+Bug GC tasks are prioritized above new work (`bug_gc.priority_above_new_work: true`). Recursive Bug GC is supported up to `bug_gc.max_depth` (default 3) with cycle detection. Costs are attributed to `cost_category: bug_gc_followup` and roll up to the parent via `parent_task`, so the parent's total cost reflects the full cost of delivering the feature including all its follow-up fixes.

@@ -160,3 +160,37 @@ beastmode/daemon/logs/           # Daemon state directory (Docker volume)
 BeastMode supports multiple projects per factory. Each project has its own board (SQLite database), run directory, and deploy config. Projects are registered under `.beastmode/projects/{name}/` with `project.json` for config.
 
 The daemon uses round-robin fairness across projects with pending work. Per-project slot caps are configurable. The UI includes a project selector for switching between boards.
+
+## Brownfield Onboarding
+
+When an existing repository is connected (via the Projects page "Connect Existing Codebase" flow or `beastmode project add`), the **Brownfield Analyst** runs automatically at Standard or Full tier and produces a three-level codebase guide:
+
+```
+.beastmode/projects/{name}/
+  codebase-guide.md             # Full L2 — architecture, conventions, fragile areas, safe modification points
+  codebase-guide.l1.md          # Paragraph summary
+  codebase-guide.l0.txt         # One-sentence summary
+  codebase-guide.meta.json      # analyzed_at, target_repo_head_sha, duration, claude_skeleton metadata
+```
+
+The guide is cached and keyed on the target repo's current HEAD sha. Subsequent `/beastmode` task runs reuse the cached guide instead of re-deriving it, so the brownfield analysis cost is paid once per HEAD, not per task. Operators can force a re-analysis from the Projects page (Re-analyze button).
+
+The analyzer also seeds a layered `CLAUDE.md` skeleton into the target repo — one root `CLAUDE.md` for big-picture pointers, plus per-subdirectory `CLAUDE.md` files for local conventions (matching Anthropic's recommendation for large codebases). All seeded files include a footer marker and are written with seed-if-missing semantics: never overwrites operator edits. A `.claude/settings.json` with sensible `permissions.deny` for generated files, vendored deps, and build artifacts is also seeded when absent.
+
+The Projects page renders the L1 summary inline on every project row, with a "Show full guide" expand to L2, last-analyzed timestamp, and a Re-analyze button that triggers a fresh job with progress tracking.
+
+## Cost Transparency
+
+Every Claude invocation captures token usage and writes a row to the `run_costs` table with item_id, run_id, phase, iteration, model, input/output/cache_read/cache_creation tokens, computed `cost_usd`, and a **purpose-axis** `cost_category`:
+
+| Category | When |
+|----------|------|
+| `productive` | Default — first-pass work on a task |
+| `retry` | Iteration > 1 in the build-verify loop |
+| `heal` | Healing-attempt invocations |
+| `bug_gc_followup` | Bug GC child tasks (work to close residual failures from a parent) |
+| `wasted_decomposition` | Epic decomposition that short-circuited because children already exist |
+
+The board UI surfaces costs through three views: per-card cost badges (always visible on kanban), a per-item detail panel breakdown (per-iteration + per-category), and a `/costs` dashboard with an "in-flight" widget showing items currently spending. Bug GC child costs roll up to the parent item via `parent_task`, so an operator sees the full cost of delivering a feature including all its follow-up bug-fix children.
+
+The pricing table is in `daemon/beastmode_daemon/token_usage.py` and tracks Opus, Sonnet, and Haiku rates separately. Cache-read and cache-write tokens are priced distinctly because they dominate spend on long-context items (a typical NLSpec phase can read 5-15M cache tokens, which at Opus cache-read rates produces double-digit USD spend per item even when the operator-visible input+output is under 50K tokens).

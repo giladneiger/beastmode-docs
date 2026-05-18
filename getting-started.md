@@ -8,9 +8,22 @@ BeastMode is a Dark Factory that turns task descriptions into verified, deployed
 
 Open the BeastMode Board UI in your browser at `http://localhost:8420` (or ask your admin for the URL and password). If BeastMode isn't running yet, start it with `beastmode up`.
 
-### 2. Add Your Project
+### 2. Connect Your Project
 
-Go to **Projects** in the sidebar and click **Add Project**. Point it at your Git repository. BeastMode auto-detects the tech stack (Node.js, Python, Go, Rust, Java, etc.).
+Go to **Projects** in the sidebar. Two paths:
+
+- **Start from Scratch** — describe the new product; BeastMode walks you through brainstorming, PRD, and initial architecture.
+- **Connect Existing Codebase** — point at a local path or paste a GitHub URL. BeastMode auto-detects the tech stack (Node.js, Python, Go, Rust, Java, etc.) and offers three onboarding tiers:
+
+| Tier | What it does |
+|------|--------------|
+| Quick | Register the project, no analysis |
+| Standard | Register + run the **Brownfield Analyst** to produce a layered codebase guide |
+| Full | Standard + draft the first task on top of the codebase guide |
+
+At Standard or Full tier, the Brownfield Analyst reads the repository and writes a three-level guide (L0 one-line / L1 paragraph / L2 architecture map) to `.beastmode/projects/<name>/codebase-guide.md`. The Projects page renders the L1 summary inline on each project row, with a "Show full guide" expand for the L2 detail and a Re-analyze button to refresh it. The guide is cached on the repo's current HEAD sha — subsequent task runs reuse it instead of re-deriving.
+
+The analyzer also seeds a layered `CLAUDE.md` skeleton and `.claude/settings.json` into the target repo for Claude Code itself, following the [Anthropic best practices for large codebases](https://claude.com/blog/how-claude-code-works-in-large-codebases-best-practices-and-where-to-start). All seeded files are seed-if-missing — your existing `CLAUDE.md` is never overwritten.
 
 ### 3. Create a Task
 
